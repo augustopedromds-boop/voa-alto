@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>VOA ALTO</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================
+         TOPO
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="logo">
+            🦅 VOA ALTO
+        </div>
+
+        <div class="top-actions">
+
+            <div class="saldo">
+                Saldo:
+                <strong id="saldo">10.000 Kz</strong>
+            </div>
+
+            <button class="icon-btn" aria-label="Definições">
+                ⚙️
+            </button>
+
+            <button class="icon-btn" aria-label="Perfil">
+                👤
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         ÁREA PRINCIPAL
+    ========================== -->
+
+    <main class="game-area">
+
+        <!-- =========================
+             ÁREA DO VOO
+        ========================== -->
+
+        <section class="flight">
+
+            <!-- Multiplicador -->
+
+            <div
+                class="multiplier"
+                id="multiplier"
+            >
+                1.00x
+            </div>
+
+
+            <!-- Estado do voo -->
+
+            <div
+                class="flight-status"
+                id="flightStatus"
+            >
+                A águia vai levantar voo...
+            </div>
+
+
+            <!-- Céu / campo de voo -->
+
+            <div class="sky">
+
+                <!-- Grelha de fundo -->
+
+                <div class="sky-grid"></div>
+
+
+                <!-- Linha da trajetória -->
+
+                <div
+                    class="flight-line"
+                    id="flightLine"
+                ></div>
+
+
+                <!-- Partículas -->
+
+                <div class="particle particle-1"></div>
+                <div class="particle particle-2"></div>
+                <div class="particle particle-3"></div>
+                <div class="particle particle-4"></div>
+
+
+                <!-- ÁGUIA -->
+
+                <div
+                    class="eagle"
+                    id="eagle"
+                >
+
+                    <!-- Asa traseira -->
+
+                    <div class="wing wing-back">
+                        🪽
+                    </div>
+
+
+                    <!-- Corpo -->
+
+                    <div class="eagle-body">
+                        🦅
+                    </div>
+
+
+                    <!-- Asa dianteira -->
+
+                    <div class="wing wing-front">
+                        🪽
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PAINEL DE APOSTA
+        ========================== -->
+
+        <aside class="bet-panel">
+
+
+            <!-- Abas -->
+
+            <div class="tabs">
+
+                <button
+                    class="tab active"
+                    id="betTab"
+                >
+                    APOSTAR
+                </button>
+
+                <button
+                    class="tab"
+                    id="historyTab"
+                >
+                    HISTÓRICO
+                </button>
+
+            </div>
+
+
+            <!-- =====================
+                 VALOR DA APOSTA
+            ====================== -->
+
+            <div class="bet-card">
+
+                <div class="bet-title">
+                    VALOR DA APOSTA
+                </div>
+
+
+                <div class="amount-box">
+
+                    <button
+                        type="button"
+                        id="minus"
+                    >
+                        −
+                    </button>
+
+
+                    <input
+                        type="number"
+                        id="betAmount"
+                        value="500"
+                        min="100"
+                        step="100"
+                    >
+
+
+                    <button
+                        type="button"
+                        id="plus"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <!-- Botão principal -->
+
+                <button
+                    class="bet-button"
+                    id="betButton"
+                    type="button"
+                >
+                    APOSTAR
+                </button>
+
+            </div>
+
+
+            <!-- =====================
+                 RETIRADA AUTOMÁTICA
+            ====================== -->
+
+            <div class="bet-card">
+
+                <div class="bet-title">
+                    RETIRADA AUTOMÁTICA
+                </div>
+
+
+                <div class="amount-box">
+
+                    <input
+                        type="number"
+                        id="autoCashout"
+                        value="2.00"
+                        step="0.10"
+                        min="1.01"
+                    >
+
+
+                    <span class="x">
+                        x
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================
+                 ESTADO DA APOSTA
+            ====================== -->
+
+            <div
+                class="bet-status"
+                id="betStatus"
+            >
+                Nenhuma aposta nesta rodada.
+            </div>
+
+
+            <!-- =====================
+                 RETIRAR
+            ====================== -->
+
+            <button
+                class="cashout-button"
+                id="cashoutButton"
+                type="button"
+                disabled
+            >
+                RETIRAR
+            </button>
+
+        </aside>
+
+    </main>
+
+
+    <!-- =========================
+         HISTÓRICO DAS RODADAS
+    ========================== -->
+
+    <section
+        class="history"
+        id="history"
+    >
+
+        <span>1.08x</span>
+
+        <span class="gold">
+            2.42x
+        </span>
+
+        <span>
+            1.13x
+        </span>
+
+        <span class="gold">
+            5.76x
+        </span>
+
+        <span>
+            1.01x
+        </span>
+
+        <span>
+            3.20x
+        </span>
+
+        <span>
+            1.44x
+        </span>
+
+    </section>
+
+
+    <!-- =========================
+         MENU INFERIOR
+    ========================== -->
+
+    <footer class="bottom-menu">
+
+
+        <button
+            class="menu-item active"
+            type="button"
+        >
+
+            <span class="menu-icon">
+                🏠
+            </span>
+
+            <small>
+                JOGAR
+            </small>
+
+        </button>
+
+
+        <button
+            class="menu-item"
+            type="button"
+        >
+
+            <span class="menu-icon">
+                💰
+            </span>
+
+            <small>
+                SALDO
+            </small>
+
+        </button>
+
+
+        <button
+            class="menu-item"
+            type="button"
+        >
+
+            <span class="menu-icon">
+                📊
+            </span>
+
+            <small>
+                HISTÓRICO
+            </small>
+
+        </button>
+
+
+        <button
+            class="menu-item"
+            type="button"
+        >
+
+            <span class="menu-icon">
+                👤
+            </span>
+
+            <small>
+                PERFIL
+            </small>
+
+        </button>
+
+    </footer>
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script src="app.js"></script>
+
+</body>
+</html>
