@@ -1,0 +1,1089 @@
+/* =========================================
+   VOA ALTO
+   STYLE.CSS
+========================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #050505;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+
+/* =========================================
+   APP
+========================================= */
+
+.app {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #070707;
+}
+
+
+/* =========================================
+   TOPO
+========================================= */
+
+.topbar {
+    height: 64px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 22px;
+
+    background: #111111;
+    border-bottom: 1px solid #292929;
+}
+
+
+.logo {
+    color: #f4bf31;
+
+    font-size: 22px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    white-space: nowrap;
+}
+
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.saldo {
+    padding: 9px 14px;
+
+    background: #1a1a1a;
+
+    border: 1px solid #333333;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    color: #aaaaaa;
+}
+
+
+.saldo strong {
+    color: #ffffff;
+}
+
+
+.icon-btn {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #292929;
+
+    border-radius: 8px;
+
+    background: #181818;
+
+    color: #ffffff;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.icon-btn:hover {
+    background: #252525;
+}
+
+
+/* =========================================
+   ÁREA PRINCIPAL
+========================================= */
+
+.game-area {
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+}
+
+
+/* =========================================
+   ÁREA DO VOO
+========================================= */
+
+.flight {
+    position: relative;
+
+    flex: 1;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 42%,
+            #302508 0%,
+            #161308 25%,
+            #090909 60%,
+            #050505 100%
+        );
+}
+
+
+/* =========================================
+   MULTIPLICADOR
+========================================= */
+
+.multiplier {
+    position: absolute;
+
+    top: 11%;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 10;
+
+    font-size: clamp(48px, 7vw, 88px);
+
+    font-weight: 900;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 10px rgba(244, 191, 49, 0.25),
+        0 0 30px rgba(244, 191, 49, 0.18);
+
+    white-space: nowrap;
+}
+
+
+.flight-status {
+    position: absolute;
+
+    top: 26%;
+    left: 0;
+
+    width: 100%;
+
+    z-index: 10;
+
+    text-align: center;
+
+    color: #999999;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   CÉU
+========================================= */
+
+.sky {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   GRELHA
+========================================= */
+
+.sky-grid {
+    position: absolute;
+
+    width: 150%;
+    height: 150%;
+
+    left: -25%;
+    top: 10%;
+
+    opacity: 0.12;
+
+    background-image:
+        linear-gradient(
+            rgba(244, 191, 49, 0.7) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(244, 191, 49, 0.7) 1px,
+            transparent 1px
+        );
+
+    background-size: 70px 70px;
+
+    transform:
+        perspective(500px)
+        rotateX(58deg);
+
+    transform-origin: center bottom;
+}
+
+
+/* =========================================
+   TRAJETÓRIA
+========================================= */
+
+.flight-line {
+    position: absolute;
+
+    width: 90%;
+    height: 65%;
+
+    left: 5%;
+    bottom: 3%;
+
+    border-bottom: 3px solid rgba(244, 191, 49, 0.75);
+
+    border-radius:
+        0
+        0
+        90%
+        15%;
+
+    transform: rotate(-12deg);
+
+    filter:
+        drop-shadow(
+            0 0 10px rgba(244, 191, 49, 0.7)
+        );
+}
+
+
+/* =========================================
+   ÁGUIA
+========================================= */
+
+.eagle {
+    position: absolute;
+
+    left: 50%;
+    top: 54%;
+
+    width: 160px;
+    height: 120px;
+
+    transform:
+        translate(-50%, -50%);
+
+    z-index: 5;
+
+    animation:
+        eagle-body 1.5s
+        ease-in-out
+        infinite;
+}
+
+
+/* =========================================
+   CORPO
+========================================= */
+
+.eagle-body {
+    position: absolute;
+
+    left: 50%;
+    top: 48%;
+
+    transform:
+        translate(-50%, -50%);
+
+    font-size: 70px;
+
+    line-height: 1;
+
+    z-index: 4;
+
+    filter:
+        drop-shadow(
+            0 0 15px
+            rgba(244, 191, 49, 0.55)
+        );
+}
+
+
+/* =========================================
+   ASAS
+========================================= */
+
+.wing {
+    position: absolute;
+
+    top: 20px;
+
+    font-size: 65px;
+
+    line-height: 1;
+
+    transform-origin: bottom center;
+}
+
+
+/* ASA TRASEIRA */
+
+.wing-back {
+    right: 4px;
+
+    z-index: 2;
+
+    animation:
+        wing-back
+        0.52s
+        ease-in-out
+        infinite alternate;
+}
+
+
+/* ASA DA FRENTE */
+
+.wing-front {
+    left: 5px;
+
+    z-index: 6;
+
+    animation:
+        wing-front
+        0.52s
+        ease-in-out
+        infinite alternate;
+}
+
+
+/* =========================================
+   ANIMAÇÃO ASA DA FRENTE
+========================================= */
+
+@keyframes wing-front {
+
+    from {
+        transform:
+            rotate(35deg)
+            scaleY(0.80);
+    }
+
+    to {
+        transform:
+            rotate(-18deg)
+            scaleY(1.08);
+    }
+
+}
+
+
+/* =========================================
+   ANIMAÇÃO ASA TRASEIRA
+========================================= */
+
+@keyframes wing-back {
+
+    from {
+        transform:
+            rotate(-32deg)
+            scaleY(0.82);
+    }
+
+    to {
+        transform:
+            rotate(17deg)
+            scaleY(1.05);
+    }
+
+}
+
+
+/* =========================================
+   MOVIMENTO DO CORPO
+========================================= */
+
+@keyframes eagle-body {
+
+    0% {
+
+        transform:
+            translate(-50%, -50%)
+            rotate(-7deg);
+
+    }
+
+    50% {
+
+        transform:
+            translate(-50%, -61%)
+            rotate(-2deg);
+
+    }
+
+    100% {
+
+        transform:
+            translate(-50%, -50%)
+            rotate(-7deg);
+
+    }
+
+}
+
+
+/* =========================================
+   PARTÍCULAS
+========================================= */
+
+.particle {
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #f4bf31;
+
+    box-shadow:
+        0 0 10px #f4bf31;
+
+    animation:
+        particle-move
+        1.7s
+        linear
+        infinite;
+}
+
+
+.particle-1 {
+    left: 63%;
+    top: 64%;
+}
+
+
+.particle-2 {
+    left: 70%;
+    top: 55%;
+
+    animation-delay: 0.5s;
+}
+
+
+.particle-3 {
+    left: 55%;
+    top: 69%;
+
+    animation-delay: 1s;
+}
+
+
+.particle-4 {
+    left: 76%;
+    top: 62%;
+
+    animation-delay: 1.3s;
+}
+
+
+@keyframes particle-move {
+
+    from {
+
+        transform:
+            translate(0, 0);
+
+        opacity: 1;
+    }
+
+    to {
+
+        transform:
+            translate(-190px, 110px);
+
+        opacity: 0;
+    }
+
+}
+
+
+/* =========================================
+   PAINEL DE APOSTA
+========================================= */
+
+.bet-panel {
+    width: 325px;
+
+    flex-shrink: 0;
+
+    padding: 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+
+    background: #0e0e0e;
+
+    border-left: 1px solid #292929;
+}
+
+
+/* =========================================
+   ABAS
+========================================= */
+
+.tabs {
+    display: flex;
+
+    padding: 3px;
+
+    background: #181818;
+
+    border-radius: 8px;
+}
+
+
+.tab {
+    flex: 1;
+
+    border: 0;
+
+    padding: 10px;
+
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #999999;
+
+    cursor: pointer;
+}
+
+
+.tab.active {
+    background: #292929;
+
+    color: #ffffff;
+}
+
+
+/* =========================================
+   CARTÃO
+========================================= */
+
+.bet-card {
+    padding: 12px;
+
+    background: #151515;
+
+    border: 1px solid #292929;
+
+    border-radius: 10px;
+}
+
+
+.bet-title {
+    margin-bottom: 8px;
+
+    color: #999999;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   VALOR
+========================================= */
+
+.amount-box {
+    display: flex;
+
+    gap: 6px;
+}
+
+
+.amount-box input {
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 11px;
+
+    border: 1px solid #383838;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: #0a0a0a;
+
+    color: #ffffff;
+
+    font-size: 15px;
+}
+
+
+.amount-box button {
+    width: 42px;
+
+    border: 0;
+
+    border-radius: 7px;
+
+    background: #252525;
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+.amount-box button:hover {
+    background: #333333;
+}
+
+
+.x {
+    display: flex;
+
+    align-items: center;
+
+    padding-right: 8px;
+
+    color: #aaaaaa;
+}
+
+
+/* =========================================
+   BOTÃO APOSTAR
+========================================= */
+
+.bet-button {
+    width: 100%;
+
+    margin-top: 9px;
+
+    padding: 14px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #f4bf31;
+
+    color: #080808;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.bet-button:hover {
+    background: #ffdc6b;
+}
+
+
+/* =========================================
+   ESTADO DA APOSTA
+========================================= */
+
+.bet-status {
+    padding: 10px;
+
+    border-radius: 8px;
+
+    background: #111111;
+
+    border: 1px solid #252525;
+
+    color: #888888;
+
+    font-size: 11px;
+
+    text-align: center;
+}
+
+
+/* =========================================
+   RETIRAR
+========================================= */
+
+.cashout-button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: #31c96b;
+
+    color: #071008;
+
+    font-weight: 900;
+
+    cursor: pointer;
+
+    opacity: 0.35;
+}
+
+
+.cashout-button:not(:disabled) {
+    opacity: 1;
+}
+
+
+/* =========================================
+   HISTÓRICO
+========================================= */
+
+.history {
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 0 12px;
+
+    overflow-x: auto;
+
+    background: #101010;
+
+    border-top: 1px solid #292929;
+}
+
+
+.history span {
+    flex-shrink: 0;
+
+    padding: 6px 10px;
+
+    border-radius: 14px;
+
+    background: #1b1b1b;
+
+    color: #aaaaaa;
+
+    font-size: 11px;
+}
+
+
+.history .gold {
+    color: #f4bf31;
+}
+
+
+/* =========================================
+   MENU INFERIOR
+========================================= */
+
+.bottom-menu {
+    height: 54px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 45px;
+
+    background: #101010;
+
+    border-top: 1px solid #292929;
+}
+
+
+.menu-item {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 2px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #777777;
+
+    cursor: pointer;
+}
+
+
+.menu-item.active {
+    color: #f4bf31;
+}
+
+
+.menu-icon {
+    font-size: 17px;
+}
+
+
+.menu-item small {
+    font-size: 9px;
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+    .bet-panel {
+        width: 290px;
+    }
+
+    .bottom-menu {
+        gap: 30px;
+    }
+
+}
+
+
+/* =========================================
+   CELULAR
+========================================= */
+
+@media (max-width: 760px) {
+
+    body {
+        overflow: hidden;
+    }
+
+
+    .topbar {
+        height: 56px;
+
+        padding: 0 11px;
+    }
+
+
+    .logo {
+        font-size: 17px;
+
+        letter-spacing: 1px;
+    }
+
+
+    .saldo {
+        padding: 7px 9px;
+
+        font-size: 11px;
+    }
+
+
+    .icon-btn {
+        width: 32px;
+        height: 32px;
+
+        font-size: 14px;
+    }
+
+
+    .game-area {
+        position: relative;
+
+        display: block;
+    }
+
+
+    .flight {
+        width: 100%;
+
+        height: calc(100vh - 158px);
+    }
+
+
+    .multiplier {
+        top: 16%;
+
+        font-size: 55px;
+    }
+
+
+    .flight-status {
+        top: 25%;
+
+        font-size: 11px;
+    }
+
+
+    .eagle {
+        transform:
+            translate(-50%, -50%)
+            scale(0.78);
+    }
+
+
+    .bet-panel {
+        position: absolute;
+
+        z-index: 20;
+
+        left: 0;
+        bottom: 0;
+
+        width: 100%;
+
+        height: 166px;
+
+        padding: 8px;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 7px;
+
+        background: rgba(12, 12, 12, 0.97);
+
+        border-top: 1px solid #292929;
+
+        border-left: 0;
+    }
+
+
+    .tabs {
+        grid-column: 1 / 3;
+    }
+
+
+    .bet-card {
+        padding: 7px;
+    }
+
+
+    .bet-card:nth-of-type(3) {
+        display: none;
+    }
+
+
+    .bet-status {
+        display: none;
+    }
+
+
+    .cashout-button {
+        display: none;
+    }
+
+
+    .history {
+        position: absolute;
+
+        z-index: 30;
+
+        top: 56px;
+
+        left: 0;
+
+        width: 100%;
+
+        height: 42px;
+    }
+
+
+    .bottom-menu {
+        height: 48px;
+
+        gap: 20px;
+    }
+
+
+    .menu-item small {
+        font-size: 8px;
+    }
+
+}
+
+
+/* =========================================
+   CELULAR PEQUENO
+========================================= */
+
+@media (max-width: 430px) {
+
+    .top-actions {
+        gap: 5px;
+    }
+
+
+    .saldo {
+        max-width: 125px;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        text-overflow: ellipsis;
+    }
+
+
+    .multiplier {
+        font-size: 46px;
+    }
+
+
+    .bet-panel {
+        height: 160px;
+    }
+
+
+    .amount-box input {
+        padding: 9px;
+
+        font-size: 14px;
+    }
+
+
+    .bet-button {
+        padding: 11px;
+    }
+
+}
