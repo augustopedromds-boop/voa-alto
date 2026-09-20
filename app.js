@@ -841,30 +841,6 @@ function pararMovimentoCenario() {
 
 }
 
-/* =========================================
-   PARAR MOVIMENTO DO FUNDO
-========================================= */
-
-function pararMovimentoCenario() {
-
-    if (cenarioAnimacao) {
-
-        cenarioAnimacao.cancel();
-
-        cenarioAnimacao =
-            null;
-
-    }
-
-
-    if (skyElement) {
-
-        skyElement.style.transform =
-            "translateX(0%)";
-
-    }
-
-}
 
 /* =========================================
    PLUS
