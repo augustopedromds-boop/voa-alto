@@ -732,82 +732,35 @@ function diferenciarSegundoCenario(
 ========================================= */
 
 function iniciarMovimentoCenario() {
-
     if (!skyElement) return;
 
-const solElement = skyElement.querySelector(".sun");
-
-if (solElement) {
-    solElement.style.setProperty(
-        "z-index",
-        "5",
-        "important"
-    );
-}
-   
     prepararCenarioInfinito();
 
+    pararMovimentoCenario();
 
-    /*
-       Parar animação anterior.
-    */
+    let inicio = performance.now();
+    const duracao = 7000;
 
-    if (cenarioAnimacao) {
+    function moverAgora(agora) {
+        if (!cenarioTrack) return;
 
-        cenarioAnimacao.cancel();
+        const tempo = (agora - inicio) % duracao;
+        const progresso = tempo / duracao;
+
+        // Move exatamente 50% da largura total do track
+        const deslocamento = progresso * 50;
+
+        cenarioTrack.style.transform =
+            `translate3d(-${deslocamento}%, 0, 0)`;
 
         cenarioAnimacao =
-            null;
-
+            requestAnimationFrame(moverAgora);
     }
 
-
-    /*
-       Garantir posição inicial.
-    */
-
-    cenarioTrack.style.transform =
-        "translateX(0)";
-
-
-    /*
-       MOVIMENTO CONTÍNUO:
-       
-       0%
-       ↓
-       -50%
-       ↓
-       reinicia
-       ↓
-       -50%
-       ↓
-       reinicia...
-
-       Sempre para a ESQUERDA.
-    */
+    inicio = performance.now();
 
     cenarioAnimacao =
-        cenarioTrack.animate(
-            [
-                {
-                    transform:
-                        "translateX(0%)"
-                },
-
-                {
-                    transform:
-                        "translateX(-50%)"
-                }
-            ],
-            {
-                duration: 7000,
-                iterations: Infinity,
-                direction: "normal",
-                easing: "linear",
-                fill: "none"
-            }
-        );
-
+        requestAnimationFrame(moverAgora);
 }
 
 
@@ -816,22 +769,11 @@ if (solElement) {
 ========================================= */
 
 function pararMovimentoCenario() {
-    if (!cenarioAnimacao || !cenarioTrack) return;
-
-    const estadoAtual = cenarioAnimacao.effect.getComputedTiming();
-
-    const transformAtual =
-        getComputedStyle(cenarioTrack).transform;
-
-    cenarioAnimacao.cancel();
-    cenarioAnimacao = null;
-
-    // Mantém exatamente a posição onde o cenário parou
-    if (transformAtual && transformAtual !== "none") {
-        cenarioTrack.style.transform = transformAtual;
+    if (cenarioAnimacao) {
+        cancelAnimationFrame(cenarioAnimacao);
+        cenarioAnimacao = null;
     }
 }
-
 
 /* =========================================
    PLUS
