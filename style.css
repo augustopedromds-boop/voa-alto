@@ -1779,3 +1779,61 @@ body {
     }
 
 }
+
+/* =========================================
+   CORREÇÃO — ÁGUIA NO CHÃO
+========================================= */
+
+.eagle {
+    position: absolute !important;
+
+    left: 50% !important;
+    top: 78% !important;
+
+    width: 220px !important;
+    height: 220px !important;
+
+    transform:
+        translate(-50%, -50%) !important;
+
+    z-index: 100 !important;
+
+    display: block !important;
+
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    pointer-events: none;
+}
+
+.eagle-sprite {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: block !important;
+
+    background-image:
+        url("ChatGPT Image 16_09_2026, 07_02_38.png") !important;
+
+    background-repeat: no-repeat !important;
+
+    background-size:
+        400% 200% !important;
+
+    background-position:
+        0% 0% !important;
+
+    animation: none !important;
+
+    opacity: 1 !important;
+
+    visibility: visible !important;
+
+    background-color: transparent !important;
+
+    filter:
+        drop-shadow(
+            0 10px 12px rgba(0,0,0,0.6)
+        );
+}
