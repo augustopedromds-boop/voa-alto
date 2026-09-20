@@ -1,6 +1,13 @@
+```javascript
 /* =========================================
    VOA ALTO
    APP.JS
+   VERSÃO: CHÃO → DESCOLAGEM → VOO → QUEDA
+========================================= */
+
+
+/* =========================================
+   ESTADO DO JOGO
 ========================================= */
 
 let saldo = 10000;
@@ -20,6 +27,10 @@ let animationFrame = null;
 let inicioVoo = 0;
 
 let fimVoo = 0;
+
+let tempoDescolagem = 0;
+
+let estadoVoo = "chao";
 
 
 /* =========================================
@@ -88,6 +99,43 @@ function atualizarMultiplicador() {
 
 
 /* =========================================
+   POSIÇÃO DA ÁGUIA
+========================================= */
+
+function colocarAguiaNoChao() {
+
+    eagleElement.style.left = "50%";
+
+    eagleElement.style.top = "79%";
+
+    eagleElement.style.transform =
+        "translate(-50%, -50%) rotate(0deg)";
+
+}
+
+
+/* =========================================
+   MOVIMENTO DA ÁGUIA
+========================================= */
+
+function moverAguia(
+    altura,
+    inclinacao = -5,
+    escala = 1
+) {
+
+    eagleElement.style.transform =
+        `translate(
+            -50%,
+            calc(-50% - ${altura}px)
+         )
+         rotate(${inclinacao}deg)
+         scale(${escala})`;
+
+}
+
+
+/* =========================================
    ALTERAR VALOR DA APOSTA
 ========================================= */
 
@@ -98,7 +146,8 @@ plusButton.addEventListener("click", () => {
 
     valor += 100;
 
-    betAmountElement.value = valor;
+    betAmountElement.value =
+        valor;
 
 });
 
@@ -116,7 +165,8 @@ minusButton.addEventListener("click", () => {
 
     }
 
-    betAmountElement.value = valor;
+    betAmountElement.value =
+        valor;
 
 });
 
@@ -134,10 +184,15 @@ betButton.addEventListener("click", () => {
     }
 
 
+    /*
+       Não permite apostar
+       enquanto a águia está no chão.
+    */
+
     if (!vooAtivo) {
 
         betStatus.textContent =
-            "Aguarda o próximo voo.";
+            "Aguarda a águia levantar voo.";
 
         return;
 
@@ -170,15 +225,22 @@ betButton.addEventListener("click", () => {
 
     saldo -= valor;
 
-    valorAposta = valor;
+    valorAposta =
+        valor;
 
-    apostaFeita = true;
+    apostaFeita =
+        true;
+
+    apostaRetirada =
+        false;
+
 
     atualizarSaldo();
 
 
     betButton.textContent =
         "APOSTA FEITA ✓";
+
 
     betButton.style.background =
         "#31c96b";
@@ -192,7 +254,6 @@ betButton.addEventListener("click", () => {
         "Aposta ativa em " +
         valor.toLocaleString("pt-AO") +
         " Kz";
-
 
 });
 
@@ -230,7 +291,8 @@ function retirarAposta() {
     }
 
 
-    apostaRetirada = true;
+    apostaRetirada =
+        true;
 
 
     const ganho =
@@ -264,12 +326,11 @@ function retirarAposta() {
     cashoutButton.style.background =
         "#555";
 
-
 }
 
 
 /* =========================================
-   VERIFICAR RETIRADA AUTOMÁTICA
+   RETIRADA AUTOMÁTICA
 ========================================= */
 
 function verificarAutoCashout() {
@@ -289,7 +350,9 @@ function verificarAutoCashout() {
 
 
     const alvo =
-        Number(autoCashoutElement.value);
+        Number(
+            autoCashoutElement.value
+        );
 
 
     if (!alvo || alvo <= 1) {
@@ -299,7 +362,9 @@ function verificarAutoCashout() {
     }
 
 
-    if (multiplicador >= alvo) {
+    if (
+        multiplicador >= alvo
+    ) {
 
         retirarAposta();
 
@@ -333,52 +398,176 @@ function animarVoo(timestamp) {
         (timestamp - inicioVoo) / 1000;
 
 
-    /*
-       Crescimento progressivo
-       do multiplicador.
-    */
+    /* =====================================
+       FASE 1 — DESCOLAGEM
+    ===================================== */
 
-    multiplicador =
-        1 +
-        (tempo * 0.45) +
-        (tempo * tempo * 0.035);
+    if (estadoVoo === "descolando") {
 
-
-    atualizarMultiplicador();
-
-
-    /*
-       Verificar retirada automática.
-    */
-
-    verificarAutoCashout();
+        const progresso =
+            Math.min(
+                tempo / 2.2,
+                1
+            );
 
 
-    /*
-       Pequeno movimento adicional
-       da águia durante o voo.
-    */
+        /*
+           Curva suave para levantar
+           do chão.
+        */
 
-    const subida =
-        Math.min(
-            tempo * 2.2,
-            130
+        const suavizado =
+            progresso *
+            progresso *
+            (3 - 2 * progresso);
+
+
+        const altura =
+            suavizado * 145;
+
+
+        const inclinacao =
+            -8 -
+            (suavizado * 7);
+
+
+        const escala =
+            1 +
+            (suavizado * 0.05);
+
+
+        moverAguia(
+            altura,
+            inclinacao,
+            escala
         );
 
 
-    const inclinacao =
-        -8 +
-        Math.sin(tempo * 2) * 3;
+        statusElement.textContent =
+            "A águia está a levantar voo...";
 
 
-    eagleElement.style.transform =
-        `translate(-50%, calc(-50% - ${subida}px))
-         rotate(${inclinacao}deg)`;
+        /*
+           Ainda não começa
+           o multiplicador.
+        */
+
+        multiplicador =
+            1.00;
+
+        atualizarMultiplicador();
 
 
-    /*
-       Voo continua.
-    */
+        /*
+           Depois de levantar,
+           começa o voo verdadeiro.
+        */
+
+        if (progresso >= 1) {
+
+            estadoVoo =
+                "voando";
+
+            inicioVoo =
+                timestamp;
+
+            statusElement.textContent =
+                "A águia está a voar!";
+
+        }
+
+    }
+
+
+    /* =====================================
+       FASE 2 — VOO
+    ===================================== */
+
+    else if (estadoVoo === "voando") {
+
+        const tempoVoo =
+            (timestamp - inicioVoo) / 1000;
+
+
+        /*
+           Multiplicador.
+        */
+
+        multiplicador =
+            1 +
+            (tempoVoo * 0.45) +
+            (tempoVoo * tempoVoo * 0.035);
+
+
+        atualizarMultiplicador();
+
+
+        verificarAutoCashout();
+
+
+        /*
+           Movimento vertical.
+        */
+
+        const subidaBase =
+            145;
+
+
+        const subidaExtra =
+            Math.min(
+                tempoVoo * 10,
+                250
+            );
+
+
+        /*
+           Movimento ondulado
+           para dar sensação de voo.
+        */
+
+        const ondulacao =
+            Math.sin(
+                tempoVoo * 2.2
+            ) * 12;
+
+
+        const altura =
+            subidaBase +
+            subidaExtra +
+            ondulacao;
+
+
+        const inclinacao =
+            -12 +
+            Math.sin(
+                tempoVoo * 2
+            ) * 4;
+
+
+        moverAguia(
+            altura,
+            inclinacao,
+            1.03
+        );
+
+
+        /*
+           Voo terminou.
+        */
+
+        if (
+            timestamp - inicioVoo >=
+            fimVoo
+        ) {
+
+            iniciarQueda();
+
+            return;
+
+        }
+
+    }
+
 
     animationFrame =
         requestAnimationFrame(
@@ -394,26 +583,53 @@ function animarVoo(timestamp) {
 
 function iniciarVoo() {
 
-    vooAtivo = true;
+    if (vooAtivo) {
 
-    multiplicador = 1.00;
+        return;
 
-    apostaFeita = false;
+    }
 
-    apostaRetirada = false;
 
-    inicioVoo = 0;
+    vooAtivo =
+        true;
+
+
+    estadoVoo =
+        "descolando";
+
+
+    multiplicador =
+        1.00;
+
+
+    apostaFeita =
+        false;
+
+
+    apostaRetirada =
+        false;
+
+
+    inicioVoo =
+        0;
+
+
+    tempoDescolagem =
+        0;
 
 
     atualizarMultiplicador();
 
 
+    colocarAguiaNoChao();
+
+
     statusElement.textContent =
-        "A águia está a ganhar altitude...";
+        "A águia está a preparar-se...";
 
 
     betStatus.textContent =
-        "Nenhuma aposta nesta rodada.";
+        "Aguarda a descolagem.";
 
 
     betButton.textContent =
@@ -437,23 +653,7 @@ function iniciarVoo() {
 
 
     /*
-       A águia começa novamente
-       na posição inicial.
-    */
-
-    eagleElement.style.transform =
-        "translate(-50%, -50%)";
-
-
-    animationFrame =
-        requestAnimationFrame(
-            animarVoo
-        );
-
-
-    /*
-       A rodada termina depois
-       de alguns segundos.
+       A duração do voo verdadeiro.
     */
 
     fimVoo =
@@ -461,19 +661,39 @@ function iniciarVoo() {
         Math.random() * 9000;
 
 
-    setTimeout(
-        terminarVoo,
-        fimVoo
-    );
+    /*
+       Pequena preparação
+       antes de começar a bater asas.
+    */
+
+    setTimeout(() => {
+
+        if (!vooAtivo) {
+
+            return;
+
+        }
+
+
+        statusElement.textContent =
+            "A águia está a bater as asas...";
+
+
+        animationFrame =
+            requestAnimationFrame(
+                animarVoo
+            );
+
+    }, 1000);
 
 }
 
 
 /* =========================================
-   TERMINAR VOO
+   INICIAR QUEDA
 ========================================= */
 
-function terminarVoo() {
+function iniciarQueda() {
 
     if (!vooAtivo) {
 
@@ -482,8 +702,25 @@ function terminarVoo() {
     }
 
 
-    vooAtivo = false;
+    estadoVoo =
+        "caindo";
 
+
+    statusElement.textContent =
+        "A águia está a cair...";
+
+
+    /*
+       Congelar o multiplicador
+       no valor final.
+    */
+
+    atualizarMultiplicador();
+
+
+    /*
+       Cancelar animação anterior.
+    */
 
     if (animationFrame) {
 
@@ -495,8 +732,137 @@ function terminarVoo() {
 
 
     /*
-       Se o jogador ainda tinha
-       uma aposta ativa, perdeu.
+       Começar queda.
+    */
+
+    requestAnimationFrame(
+        animarQueda
+    );
+
+}
+
+
+/* =========================================
+   ANIMAÇÃO DA QUEDA
+========================================= */
+
+function animarQueda(timestamp) {
+
+    const duracaoQueda =
+        1800;
+
+
+    if (!tempoQuedaInicio) {
+
+        tempoQuedaInicio =
+            timestamp;
+
+    }
+
+
+    const tempo =
+        timestamp -
+        tempoQuedaInicio;
+
+
+    let progresso =
+        tempo /
+        duracaoQueda;
+
+
+    if (progresso > 1) {
+
+        progresso = 1;
+
+    }
+
+
+    /*
+       Suavização.
+    */
+
+    const suavizado =
+        progresso *
+        progresso;
+
+
+    /*
+       Começa alto e vai para o chão.
+    */
+
+    const alturaInicial =
+        145 +
+        Math.min(
+            fimVoo / 1000 * 10,
+            250
+        );
+
+
+    const altura =
+        alturaInicial *
+        (1 - suavizado);
+
+
+    const inclinacao =
+        10 +
+        suavizado * 18;
+
+
+    moverAguia(
+        altura,
+        inclinacao,
+        1 -
+        suavizado * 0.05
+    );
+
+
+    if (progresso >= 1) {
+
+        finalizarQueda();
+
+        return;
+
+    }
+
+
+    requestAnimationFrame(
+        animarQueda
+    );
+
+}
+
+
+/* =========================================
+   VARIÁVEL DA QUEDA
+========================================= */
+
+let tempoQuedaInicio = 0;
+
+
+/* =========================================
+   FINALIZAR QUEDA
+========================================= */
+
+function finalizarQueda() {
+
+    tempoQuedaInicio =
+        0;
+
+
+    vooAtivo =
+        false;
+
+
+    estadoVoo =
+        "chao";
+
+
+    colocarAguiaNoChao();
+
+
+    /*
+       Se havia aposta ativa,
+       perdeu quando o voo terminou.
     */
 
     if (
@@ -511,13 +877,8 @@ function terminarVoo() {
 
 
     statusElement.textContent =
-        "VOO TERMINOU";
+        "A águia voltou ao chão.";
 
-
-    /*
-       Guardar multiplicador
-       no histórico.
-    */
 
     adicionarHistorico(
         multiplicador
@@ -525,8 +886,7 @@ function terminarVoo() {
 
 
     /*
-       Pequena pausa antes
-       do próximo voo.
+       Preparar próxima rodada.
     */
 
     setTimeout(
@@ -538,26 +898,32 @@ function terminarVoo() {
 
 
 /* =========================================
-   NOVO VOO
+   PREPARAR NOVO VOO
 ========================================= */
 
 function prepararNovoVoo() {
 
-    multiplicador = 1.00;
+    multiplicador =
+        1.00;
+
 
     atualizarMultiplicador();
 
 
+    colocarAguiaNoChao();
+
+
     statusElement.textContent =
-        "A próxima águia vai levantar voo...";
+        "A águia está no chão...";
 
 
-    eagleElement.style.transform =
-        "translate(-50%, -50%)";
+    betStatus.textContent =
+        "Prepara a tua aposta.";
 
 
     /*
-       Pequena espera.
+       Pequena pausa no chão
+       antes da próxima descolagem.
     */
 
     setTimeout(
@@ -584,20 +950,21 @@ function adicionarHistorico(valor) {
 
     if (valor >= 2) {
 
-        item.classList.add("gold");
+        item.classList.add(
+            "gold"
+        );
 
     }
 
 
-    historyElement.prepend(item);
+    historyElement.prepend(
+        item
+    );
 
-
-    /*
-       Limitar histórico.
-    */
 
     while (
-        historyElement.children.length > 12
+        historyElement.children.length >
+        12
     ) {
 
         historyElement.removeChild(
@@ -617,8 +984,23 @@ atualizarSaldo();
 
 atualizarMultiplicador();
 
+colocarAguiaNoChao();
+
+
+statusElement.textContent =
+    "A águia está no chão...";
+
+
+betStatus.textContent =
+    "Aguarda a próxima rodada.";
+
+
+/*
+   Primeira rodada.
+*/
 
 setTimeout(
     iniciarVoo,
     2500
 );
+```
