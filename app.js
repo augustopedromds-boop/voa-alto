@@ -732,40 +732,91 @@ function diferenciarSegundoCenario(
 ========================================= */
 
 function iniciarMovimentoCenario() {
-    if (!skyElement || !cenarioTrack) return;
+    if (!skyElement) return;
+
+    prepararCenarioInfinito();
 
     pararMovimentoCenario();
 
-    const larguraTela = skyElement.clientWidth;
+    if (!cenarioTrack) return;
 
-    if (!larguraTela) return;
+    const painel1 = cenarioTrack.querySelector(".voa-cenario-1");
+    const painel2 = cenarioTrack.querySelector(".voa-cenario-2");
 
-    let inicio = performance.now();
+    if (!painel1 || !painel2) return;
 
-    // Tempo para um cenário inteiro atravessar a tela
-    const duracao = 10000;
+    const largura = skyElement.clientWidth;
 
-    function animar(agora) {
-        if (!cenarioTrack) return;
+    if (!largura) return;
 
-        const decorrido = agora - inicio;
+    /*
+       O track passa a ocupar somente a tela.
+       Os dois cenários ficam um atrás do outro.
+    */
+    cenarioTrack.style.width = "100%";
+    cenarioTrack.style.height = "100%";
+    cenarioTrack.style.position = "absolute";
+    cenarioTrack.style.left = "0";
+    cenarioTrack.style.top = "0";
+    cenarioTrack.style.transform = "none";
 
-        // Posição entre 0 e -larguraTela
-        const progresso =
-            (decorrido % duracao) / duracao;
+    painel1.style.position = "absolute";
+    painel1.style.width = `${largura}px`;
+    painel1.style.height = "100%";
+    painel1.style.left = "0";
+    painel1.style.top = "0";
+    painel1.style.flex = "none";
 
-        const deslocamento =
-            progresso * larguraTela;
+    painel2.style.position = "absolute";
+    painel2.style.width = `${largura}px`;
+    painel2.style.height = "100%";
+    painel2.style.left = `${largura}px`;
+    painel2.style.top = "0";
+    painel2.style.flex = "none";
 
-        cenarioTrack.style.transform =
-            `translate3d(-${deslocamento}px, 0, 0)`;
+    let posicao1 = 0;
+    let posicao2 = largura;
+
+    let ultimoTempo = performance.now();
+
+    // Velocidade do cenário
+    const velocidade = largura / 10;
+
+    function mover(tempoAtual) {
+
+        const delta =
+            (tempoAtual - ultimoTempo) / 1000;
+
+        ultimoTempo = tempoAtual;
+
+        posicao1 -= velocidade * delta;
+        posicao2 -= velocidade * delta;
+
+        /*
+           Quando o cenário sai completamente
+           pela esquerda, ele volta para a direita,
+           mas já fora da tela.
+        */
+        if (posicao1 <= -largura) {
+            posicao1 = posicao2 + largura;
+        }
+
+        if (posicao2 <= -largura) {
+            posicao2 = posicao1 + largura;
+        }
+
+        painel1.style.transform =
+            `translate3d(${posicao1}px, 0, 0)`;
+
+        painel2.style.transform =
+            `translate3d(${posicao2}px, 0, 0)`;
 
         cenarioAnimacao =
-            requestAnimationFrame(animar);
+            requestAnimationFrame(mover);
     }
 
     cenarioAnimacao =
-        requestAnimationFrame(animar);
+        requestAnimationFrame(mover);
 }
 
 /* =========================================
@@ -773,6 +824,7 @@ function iniciarMovimentoCenario() {
 ========================================= */
 
 function pararMovimentoCenario() {
+
     if (cenarioAnimacao) {
         cancelAnimationFrame(cenarioAnimacao);
         cenarioAnimacao = null;
