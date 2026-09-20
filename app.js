@@ -240,7 +240,7 @@ function moverAguiaDuranteDescolagem(progresso) {
 
 
 /* =========================================
-   ANIMAÇÃO DAS ASAS
+   ANIMAÇÃO REAL DAS ASAS
 ========================================= */
 
 function iniciarBatimentoAsas() {
@@ -248,14 +248,26 @@ function iniciarBatimentoAsas() {
     if (!eagleSprite) return;
 
     /*
-       Força a animação mesmo com
-       animation:none !important
-       existente no CSS.
+       Reinicia a animação para garantir
+       que começa sempre no primeiro frame.
     */
 
     eagleSprite.style.setProperty(
         "animation",
-        "eagle-wings 0.72s steps(1) infinite",
+        "none",
+        "important"
+    );
+
+    /*
+       Força o navegador a reiniciar
+       a animação.
+    */
+
+    void eagleSprite.offsetWidth;
+
+    eagleSprite.style.setProperty(
+        "animation",
+        "eagle-wings 0.58s steps(1) infinite",
         "important"
     );
 
@@ -276,267 +288,75 @@ function pararBatimentoAsas() {
 
 
 /* =========================================
-   MOVIMENTO DO CENÁRIO
+   FUNDO — CICLO INFINITO PARA A ESQUERDA
 ========================================= */
+
+let cenarioAnimacao = null;
 
 function iniciarMovimentoCenario() {
 
     if (!skyElement) return;
 
-    skyElement.dataset.voando =
-        "true";
+    /*
+       Evita criar duas animações
+       ao mesmo tempo.
+    */
+
+    pararMovimentoCenario();
 
 
     /*
-       Nuvens
+       O cenário inteiro é tratado
+       como uma única viagem para a esquerda.
+
+       Não usamos alternate.
+       Não volta para trás.
+
+       Quando termina, reinicia.
     */
 
-    const cloud1 =
-        skyElement.querySelector(".cloud-1");
-
-    const cloud2 =
-        skyElement.querySelector(".cloud-2");
-
-    const cloud3 =
-        skyElement.querySelector(".cloud-3");
-
-
-    /*
-       Montanhas
-    */
-
-    const mountainsBack =
-        skyElement.querySelector(".mountains-back");
-
-    const mountainsFront =
-        skyElement.querySelector(".mountains-front");
-
-
-    /*
-       Árvores
-    */
-
-    const trees =
-        skyElement.querySelector(".park-trees");
-
-
-    /*
-       Relva
-    */
-
-    const grass =
-        skyElement.querySelector(".grass");
-
-
-    /*
-       Criar animações independentes.
-    */
-
-    if (cloud1) {
-
-        cloud1._voaAnim =
-            cloud1.animate(
-                [
-                    {
-                        left: "12%"
-                    },
-                    {
-                        left: "-15%"
-                    }
-                ],
+    cenarioAnimacao =
+        skyElement.animate(
+            [
                 {
-                    duration: 9000,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
-                }
-            );
-
-    }
-
-
-    if (cloud2) {
-
-        cloud2._voaAnim =
-            cloud2.animate(
-                [
-                    {
-                        right: "25%"
-                    },
-                    {
-                        right: "-10%"
-                    }
-                ],
+                    transform: "translateX(0)"
+                },
                 {
-                    duration: 13000,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
+                    transform: "translateX(-18%)"
                 }
-            );
-
-    }
-
-
-    if (cloud3) {
-
-        cloud3._voaAnim =
-            cloud3.animate(
-                [
-                    {
-                        left: "45%"
-                    },
-                    {
-                        left: "10%"
-                    }
-                ],
-                {
-                    duration: 11000,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
-                }
-            );
-
-    }
-
-
-    if (mountainsBack) {
-
-        mountainsBack._voaAnim =
-            mountainsBack.animate(
-                [
-                    {
-                        left: "-5%"
-                    },
-                    {
-                        left: "-18%"
-                    }
-                ],
-                {
-                    duration: 8000,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
-                }
-            );
-
-    }
-
-
-    if (mountainsFront) {
-
-        mountainsFront._voaAnim =
-            mountainsFront.animate(
-                [
-                    {
-                        left: "0%"
-                    },
-                    {
-                        left: "-20%"
-                    }
-                ],
-                {
-                    duration: 5000,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
-                }
-            );
-
-    }
-
-
-    if (trees) {
-
-        trees._voaAnim =
-            trees.animate(
-                [
-                    {
-                        transform: "translateX(0)"
-                    },
-                    {
-                        transform: "translateX(-180px)"
-                    }
-                ],
-                {
-                    duration: 3500,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
-                }
-            );
-
-    }
-
-
-    if (grass) {
-
-        grass._voaAnim =
-            grass.animate(
-                [
-                    {
-                        transform: "translateX(0)"
-                    },
-                    {
-                        transform: "translateX(-120px)"
-                    }
-                ],
-                {
-                    duration: 1800,
-                    iterations: Infinity,
-                    direction: "alternate",
-                    easing: "linear"
-                }
-            );
-
-    }
+            ],
+            {
+                duration: 4200,
+                iterations: Infinity,
+                direction: "normal",
+                easing: "linear"
+            }
+        );
 
 }
 
 
 /* =========================================
-   PARAR MOVIMENTO DO CENÁRIO
+   PARAR FUNDO
 ========================================= */
 
 function pararMovimentoCenario() {
 
-    if (!skyElement) return;
+    if (cenarioAnimacao) {
 
-    skyElement.dataset.voando =
-        "false";
+        cenarioAnimacao.cancel();
 
+        cenarioAnimacao =
+            null;
 
-    const elementos =
-        [
-            ".cloud-1",
-            ".cloud-2",
-            ".cloud-3",
-            ".mountains-back",
-            ".mountains-front",
-            ".park-trees",
-            ".grass"
-        ];
+    }
 
+    if (skyElement) {
 
-    elementos.forEach(seletor => {
+        skyElement.style.transform =
+            "translateX(0)";
 
-        const elemento =
-            skyElement.querySelector(seletor);
-
-        if (
-            elemento &&
-            elemento._voaAnim
-        ) {
-
-            elemento._voaAnim.cancel();
-
-            elemento._voaAnim =
-                null;
-
-        }
-
-    });
+    }
 
 }
 
