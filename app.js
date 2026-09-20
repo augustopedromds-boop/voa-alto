@@ -1,8 +1,8 @@
-```javascript
 /* =========================================
    VOA ALTO
    APP.JS
-   VERSÃO: CHÃO → DESCOLAGEM → VOO → QUEDA
+   CHÃO → BATER AS ASAS → DESCOLAGEM
+   → VOO FIXO → CENÁRIO A MOVER → QUEDA
 ========================================= */
 
 
@@ -28,9 +28,17 @@ let inicioVoo = 0;
 
 let fimVoo = 0;
 
+let estadoVoo = "chao";
+
+let tempoPreparacao = 0;
+
 let tempoDescolagem = 0;
 
-let estadoVoo = "chao";
+let tempoQuedaInicio = 0;
+
+let timerPreparacao = null;
+
+let timerQueda = null;
 
 
 /* =========================================
@@ -48,6 +56,11 @@ const statusElement =
 
 const eagleElement =
     document.getElementById("eagle");
+
+const eagleSprite =
+    eagleElement
+        ? eagleElement.querySelector(".eagle-sprite")
+        : null;
 
 const betAmountElement =
     document.getElementById("betAmount");
@@ -73,9 +86,21 @@ const minusButton =
 const historyElement =
     document.getElementById("history");
 
+const skyElement =
+    document.querySelector(".sky");
+
 
 /* =========================================
-   FORMATAR SALDO
+   POSIÇÕES DA ÁGUIA
+========================================= */
+
+const POSICAO_CHAO = 78;
+
+const POSICAO_ALTA = 42;
+
+
+/* =========================================
+   SALDO
 ========================================= */
 
 function atualizarSaldo() {
@@ -87,7 +112,7 @@ function atualizarSaldo() {
 
 
 /* =========================================
-   FORMATAR MULTIPLICADOR
+   MULTIPLICADOR
 ========================================= */
 
 function atualizarMultiplicador() {
@@ -99,167 +124,561 @@ function atualizarMultiplicador() {
 
 
 /* =========================================
-   POSIÇÃO DA ÁGUIA
+   COLOCAR ÁGUIA NO CHÃO
 ========================================= */
 
 function colocarAguiaNoChao() {
 
-    eagleElement.style.left = "50%";
+    if (!eagleElement) return;
 
-    eagleElement.style.top = "79%";
+    eagleElement.style.setProperty(
+        "left",
+        "50%",
+        "important"
+    );
 
-    eagleElement.style.transform =
-        "translate(-50%, -50%) rotate(0deg)";
+    eagleElement.style.setProperty(
+        "top",
+        POSICAO_CHAO + "%",
+        "important"
+    );
+
+    eagleElement.style.setProperty(
+        "transform",
+        "translate(-50%, -50%) rotate(0deg) scale(1)",
+        "important"
+    );
 
 }
 
 
 /* =========================================
-   MOVIMENTO DA ÁGUIA
+   POSICIONAR ÁGUIA NO ALTO
 ========================================= */
 
-function moverAguia(
-    altura,
-    inclinacao = -5,
-    escala = 1
-) {
+function colocarAguiaNoAlto() {
 
-    eagleElement.style.transform =
-        `translate(
-            -50%,
-            calc(-50% - ${altura}px)
-         )
+    if (!eagleElement) return;
+
+    eagleElement.style.setProperty(
+        "left",
+        "50%",
+        "important"
+    );
+
+    eagleElement.style.setProperty(
+        "top",
+        POSICAO_ALTA + "%",
+        "important"
+    );
+
+    eagleElement.style.setProperty(
+        "transform",
+        "translate(-50%, -50%) rotate(-4deg) scale(1.03)",
+        "important"
+    );
+
+}
+
+
+/* =========================================
+   MOVER ÁGUIA DURANTE DESCOLAGEM
+========================================= */
+
+function moverAguiaDuranteDescolagem(progresso) {
+
+    if (!eagleElement) return;
+
+    const inicio =
+        POSICAO_CHAO;
+
+    const fim =
+        POSICAO_ALTA;
+
+    /*
+       Suavização:
+       começa devagar,
+       acelera,
+       termina suavemente.
+    */
+
+    const suavizado =
+        progresso *
+        progresso *
+        (3 - 2 * progresso);
+
+    const posicao =
+        inicio -
+        (
+            (inicio - fim) *
+            suavizado
+        );
+
+    const inclinacao =
+        -3 -
+        (suavizado * 8);
+
+    const escala =
+        1 +
+        (suavizado * 0.03);
+
+    eagleElement.style.setProperty(
+        "top",
+        posicao + "%",
+        "important"
+    );
+
+    eagleElement.style.setProperty(
+        "transform",
+        `translate(-50%, -50%)
          rotate(${inclinacao}deg)
-         scale(${escala})`;
+         scale(${escala})`,
+        "important"
+    );
 
 }
 
 
 /* =========================================
-   ALTERAR VALOR DA APOSTA
+   ANIMAÇÃO DAS ASAS
 ========================================= */
 
-plusButton.addEventListener("click", () => {
+function iniciarBatimentoAsas() {
 
-    let valor =
-        Number(betAmountElement.value);
+    if (!eagleSprite) return;
 
-    valor += 100;
+    /*
+       Força a animação mesmo com
+       animation:none !important
+       existente no CSS.
+    */
 
-    betAmountElement.value =
-        valor;
+    eagleSprite.style.setProperty(
+        "animation",
+        "eagle-wings 0.72s steps(1) infinite",
+        "important"
+    );
 
-});
+}
 
 
-minusButton.addEventListener("click", () => {
+function pararBatimentoAsas() {
 
-    let valor =
-        Number(betAmountElement.value);
+    if (!eagleSprite) return;
 
-    valor -= 100;
+    eagleSprite.style.setProperty(
+        "animation",
+        "none",
+        "important"
+    );
 
-    if (valor < 100) {
+}
 
-        valor = 100;
+
+/* =========================================
+   MOVIMENTO DO CENÁRIO
+========================================= */
+
+function iniciarMovimentoCenario() {
+
+    if (!skyElement) return;
+
+    skyElement.dataset.voando =
+        "true";
+
+
+    /*
+       Nuvens
+    */
+
+    const cloud1 =
+        skyElement.querySelector(".cloud-1");
+
+    const cloud2 =
+        skyElement.querySelector(".cloud-2");
+
+    const cloud3 =
+        skyElement.querySelector(".cloud-3");
+
+
+    /*
+       Montanhas
+    */
+
+    const mountainsBack =
+        skyElement.querySelector(".mountains-back");
+
+    const mountainsFront =
+        skyElement.querySelector(".mountains-front");
+
+
+    /*
+       Árvores
+    */
+
+    const trees =
+        skyElement.querySelector(".park-trees");
+
+
+    /*
+       Relva
+    */
+
+    const grass =
+        skyElement.querySelector(".grass");
+
+
+    /*
+       Criar animações independentes.
+    */
+
+    if (cloud1) {
+
+        cloud1._voaAnim =
+            cloud1.animate(
+                [
+                    {
+                        left: "12%"
+                    },
+                    {
+                        left: "-15%"
+                    }
+                ],
+                {
+                    duration: 9000,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
 
     }
 
-    betAmountElement.value =
-        valor;
 
-});
+    if (cloud2) {
+
+        cloud2._voaAnim =
+            cloud2.animate(
+                [
+                    {
+                        right: "25%"
+                    },
+                    {
+                        right: "-10%"
+                    }
+                ],
+                {
+                    duration: 13000,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
+
+    }
+
+
+    if (cloud3) {
+
+        cloud3._voaAnim =
+            cloud3.animate(
+                [
+                    {
+                        left: "45%"
+                    },
+                    {
+                        left: "10%"
+                    }
+                ],
+                {
+                    duration: 11000,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
+
+    }
+
+
+    if (mountainsBack) {
+
+        mountainsBack._voaAnim =
+            mountainsBack.animate(
+                [
+                    {
+                        left: "-5%"
+                    },
+                    {
+                        left: "-18%"
+                    }
+                ],
+                {
+                    duration: 8000,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
+
+    }
+
+
+    if (mountainsFront) {
+
+        mountainsFront._voaAnim =
+            mountainsFront.animate(
+                [
+                    {
+                        left: "0%"
+                    },
+                    {
+                        left: "-20%"
+                    }
+                ],
+                {
+                    duration: 5000,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
+
+    }
+
+
+    if (trees) {
+
+        trees._voaAnim =
+            trees.animate(
+                [
+                    {
+                        transform: "translateX(0)"
+                    },
+                    {
+                        transform: "translateX(-180px)"
+                    }
+                ],
+                {
+                    duration: 3500,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
+
+    }
+
+
+    if (grass) {
+
+        grass._voaAnim =
+            grass.animate(
+                [
+                    {
+                        transform: "translateX(0)"
+                    },
+                    {
+                        transform: "translateX(-120px)"
+                    }
+                ],
+                {
+                    duration: 1800,
+                    iterations: Infinity,
+                    direction: "alternate",
+                    easing: "linear"
+                }
+            );
+
+    }
+
+}
+
+
+/* =========================================
+   PARAR MOVIMENTO DO CENÁRIO
+========================================= */
+
+function pararMovimentoCenario() {
+
+    if (!skyElement) return;
+
+    skyElement.dataset.voando =
+        "false";
+
+
+    const elementos =
+        [
+            ".cloud-1",
+            ".cloud-2",
+            ".cloud-3",
+            ".mountains-back",
+            ".mountains-front",
+            ".park-trees",
+            ".grass"
+        ];
+
+
+    elementos.forEach(seletor => {
+
+        const elemento =
+            skyElement.querySelector(seletor);
+
+        if (
+            elemento &&
+            elemento._voaAnim
+        ) {
+
+            elemento._voaAnim.cancel();
+
+            elemento._voaAnim =
+                null;
+
+        }
+
+    });
+
+}
+
+
+/* =========================================
+   PLUS
+========================================= */
+
+plusButton.addEventListener(
+    "click",
+    () => {
+
+        let valor =
+            Number(
+                betAmountElement.value
+            );
+
+        valor += 100;
+
+        betAmountElement.value =
+            valor;
+
+    }
+);
+
+
+/* =========================================
+   MINUS
+========================================= */
+
+minusButton.addEventListener(
+    "click",
+    () => {
+
+        let valor =
+            Number(
+                betAmountElement.value
+            );
+
+        valor -= 100;
+
+        if (valor < 100) {
+
+            valor = 100;
+
+        }
+
+        betAmountElement.value =
+            valor;
+
+    }
+);
 
 
 /* =========================================
    APOSTAR
 ========================================= */
 
-betButton.addEventListener("click", () => {
+betButton.addEventListener(
+    "click",
+    () => {
 
-    if (apostaFeita) {
+        if (apostaFeita) {
 
-        return;
+            return;
 
-    }
+        }
 
 
-    /*
-       Não permite apostar
-       enquanto a águia está no chão.
-    */
+        if (!vooAtivo) {
 
-    if (!vooAtivo) {
+            betStatus.textContent =
+                "Aguarda a águia levantar voo.";
+
+            return;
+
+        }
+
+
+        const valor =
+            Number(
+                betAmountElement.value
+            );
+
+
+        if (!valor || valor < 100) {
+
+            betStatus.textContent =
+                "A aposta mínima é 100 Kz.";
+
+            return;
+
+        }
+
+
+        if (valor > saldo) {
+
+            betStatus.textContent =
+                "Saldo insuficiente.";
+
+            return;
+
+        }
+
+
+        saldo -= valor;
+
+        valorAposta =
+            valor;
+
+        apostaFeita =
+            true;
+
+        apostaRetirada =
+            false;
+
+
+        atualizarSaldo();
+
+
+        betButton.textContent =
+            "APOSTA FEITA ✓";
+
+        betButton.style.background =
+            "#31c96b";
+
+
+        cashoutButton.disabled =
+            false;
+
 
         betStatus.textContent =
-            "Aguarda a águia levantar voo.";
-
-        return;
-
-    }
-
-
-    const valor =
-        Number(betAmountElement.value);
-
-
-    if (!valor || valor < 100) {
-
-        betStatus.textContent =
-            "A aposta mínima é 100 Kz.";
-
-        return;
+            "Aposta ativa em " +
+            valor.toLocaleString("pt-AO") +
+            " Kz";
 
     }
-
-
-    if (valor > saldo) {
-
-        betStatus.textContent =
-            "Saldo insuficiente.";
-
-        return;
-
-    }
-
-
-    saldo -= valor;
-
-    valorAposta =
-        valor;
-
-    apostaFeita =
-        true;
-
-    apostaRetirada =
-        false;
-
-
-    atualizarSaldo();
-
-
-    betButton.textContent =
-        "APOSTA FEITA ✓";
-
-
-    betButton.style.background =
-        "#31c96b";
-
-
-    cashoutButton.disabled =
-        false;
-
-
-    betStatus.textContent =
-        "Aposta ativa em " +
-        valor.toLocaleString("pt-AO") +
-        " Kz";
-
-});
+);
 
 
 /* =========================================
-   RETIRAR
+   CASH OUT
 ========================================= */
 
 cashoutButton.addEventListener(
@@ -318,10 +737,8 @@ function retirarAposta() {
     cashoutButton.disabled =
         true;
 
-
     cashoutButton.textContent =
         "RETIRADO ✓";
-
 
     cashoutButton.style.background =
         "#555";
@@ -330,7 +747,7 @@ function retirarAposta() {
 
 
 /* =========================================
-   RETIRADA AUTOMÁTICA
+   AUTO CASHOUT
 ========================================= */
 
 function verificarAutoCashout() {
@@ -374,7 +791,146 @@ function verificarAutoCashout() {
 
 
 /* =========================================
-   ANIMAÇÃO DO VOO
+   FASE DE DESCOLAGEM
+========================================= */
+
+function animarDescolagem(timestamp) {
+
+    if (!vooAtivo) {
+
+        return;
+
+    }
+
+
+    if (!tempoDescolagem) {
+
+        tempoDescolagem =
+            timestamp;
+
+    }
+
+
+    const tempo =
+        timestamp -
+        tempoDescolagem;
+
+
+    const duracao =
+        2200;
+
+
+    let progresso =
+        tempo / duracao;
+
+
+    if (progresso > 1) {
+
+        progresso = 1;
+
+    }
+
+
+    moverAguiaDuranteDescolagem(
+        progresso
+    );
+
+
+    /*
+       Ainda não existe multiplicador.
+    */
+
+    multiplicador =
+        1.00;
+
+    atualizarMultiplicador();
+
+
+    statusElement.textContent =
+        "A águia está a levantar voo...";
+
+
+    /*
+       Quando chega ao alto,
+       começa o verdadeiro voo.
+    */
+
+    if (progresso >= 1) {
+
+        iniciarVooAlto();
+
+        return;
+
+    }
+
+
+    animationFrame =
+        requestAnimationFrame(
+            animarDescolagem
+        );
+
+}
+
+
+/* =========================================
+   INICIAR VOO NO ALTO
+========================================= */
+
+function iniciarVooAlto() {
+
+    estadoVoo =
+        "voando";
+
+
+    inicioVoo =
+        performance.now();
+
+
+    multiplicador =
+        1.00;
+
+
+    atualizarMultiplicador();
+
+
+    colocarAguiaNoAlto();
+
+
+    /*
+       Agora sim:
+       começa a sensação de voo.
+    */
+
+    iniciarMovimentoCenario();
+
+
+    statusElement.textContent =
+        "A águia está a voar!";
+
+
+    betStatus.textContent =
+        "Aposta disponível.";
+
+
+    /*
+       Duração do voo verdadeiro.
+    */
+
+    fimVoo =
+        9000 +
+        Math.random() * 9000;
+
+
+    animationFrame =
+        requestAnimationFrame(
+            animarVoo
+        );
+
+}
+
+
+/* =========================================
+   VOO
 ========================================= */
 
 function animarVoo(timestamp) {
@@ -386,185 +942,86 @@ function animarVoo(timestamp) {
     }
 
 
-    if (!inicioVoo) {
+    if (
+        estadoVoo !==
+        "voando"
+    ) {
 
-        inicioVoo =
-            timestamp;
-
-    }
-
-
-    const tempo =
-        (timestamp - inicioVoo) / 1000;
-
-
-    /* =====================================
-       FASE 1 — DESCOLAGEM
-    ===================================== */
-
-    if (estadoVoo === "descolando") {
-
-        const progresso =
-            Math.min(
-                tempo / 2.2,
-                1
-            );
-
-
-        /*
-           Curva suave para levantar
-           do chão.
-        */
-
-        const suavizado =
-            progresso *
-            progresso *
-            (3 - 2 * progresso);
-
-
-        const altura =
-            suavizado * 145;
-
-
-        const inclinacao =
-            -8 -
-            (suavizado * 7);
-
-
-        const escala =
-            1 +
-            (suavizado * 0.05);
-
-
-        moverAguia(
-            altura,
-            inclinacao,
-            escala
-        );
-
-
-        statusElement.textContent =
-            "A águia está a levantar voo...";
-
-
-        /*
-           Ainda não começa
-           o multiplicador.
-        */
-
-        multiplicador =
-            1.00;
-
-        atualizarMultiplicador();
-
-
-        /*
-           Depois de levantar,
-           começa o voo verdadeiro.
-        */
-
-        if (progresso >= 1) {
-
-            estadoVoo =
-                "voando";
-
-            inicioVoo =
-                timestamp;
-
-            statusElement.textContent =
-                "A águia está a voar!";
-
-        }
+        return;
 
     }
 
 
-    /* =====================================
-       FASE 2 — VOO
-    ===================================== */
-
-    else if (estadoVoo === "voando") {
-
-        const tempoVoo =
-            (timestamp - inicioVoo) / 1000;
+    const tempoVoo =
+        (
+            timestamp -
+            inicioVoo
+        ) / 1000;
 
 
-        /*
-           Multiplicador.
-        */
+    /*
+       Multiplicador
+    */
 
-        multiplicador =
-            1 +
-            (tempoVoo * 0.45) +
-            (tempoVoo * tempoVoo * 0.035);
-
-
-        atualizarMultiplicador();
+    multiplicador =
+        1 +
+        (tempoVoo * 0.45) +
+        (tempoVoo * tempoVoo * 0.035);
 
 
-        verificarAutoCashout();
+    atualizarMultiplicador();
 
 
-        /*
-           Movimento vertical.
-        */
-
-        const subidaBase =
-            145;
+    verificarAutoCashout();
 
 
-        const subidaExtra =
-            Math.min(
-                tempoVoo * 10,
-                250
-            );
+    /*
+       A águia NÃO continua a subir.
+       Fica no alto.
+    */
+
+    const pequenaOscilacao =
+        Math.sin(
+            tempoVoo * 2.4
+        ) * 2;
 
 
-        /*
-           Movimento ondulado
-           para dar sensação de voo.
-        */
-
-        const ondulacao =
-            Math.sin(
-                tempoVoo * 2.2
-            ) * 12;
+    eagleElement.style.setProperty(
+        "top",
+        (POSICAO_ALTA + pequenaOscilacao) + "%",
+        "important"
+    );
 
 
-        const altura =
-            subidaBase +
-            subidaExtra +
-            ondulacao;
+    const inclinacao =
+        -4 +
+        Math.sin(
+            tempoVoo * 2
+        ) * 3;
 
 
-        const inclinacao =
-            -12 +
-            Math.sin(
-                tempoVoo * 2
-            ) * 4;
+    eagleElement.style.setProperty(
+        "transform",
+        `translate(-50%, -50%)
+         rotate(${inclinacao}deg)
+         scale(1.03)`,
+        "important"
+    );
 
 
-        moverAguia(
-            altura,
-            inclinacao,
-            1.03
-        );
+    /*
+       Finalizar voo
+    */
 
+    if (
+        timestamp -
+        inicioVoo >=
+        fimVoo
+    ) {
 
-        /*
-           Voo terminou.
-        */
+        iniciarQueda();
 
-        if (
-            timestamp - inicioVoo >=
-            fimVoo
-        ) {
-
-            iniciarQueda();
-
-            return;
-
-        }
+        return;
 
     }
 
@@ -578,7 +1035,7 @@ function animarVoo(timestamp) {
 
 
 /* =========================================
-   INICIAR VOO
+   INICIAR RODADA
 ========================================= */
 
 function iniciarVoo() {
@@ -595,7 +1052,7 @@ function iniciarVoo() {
 
 
     estadoVoo =
-        "descolando";
+        "preparando";
 
 
     multiplicador =
@@ -610,7 +1067,7 @@ function iniciarVoo() {
         false;
 
 
-    inicioVoo =
+    tempoPreparacao =
         0;
 
 
@@ -621,15 +1078,23 @@ function iniciarVoo() {
     atualizarMultiplicador();
 
 
+    pararMovimentoCenario();
+
+
     colocarAguiaNoChao();
 
 
+    /*
+       Primeiro:
+       águia parada no chão.
+    */
+
     statusElement.textContent =
-        "A águia está a preparar-se...";
+        "A águia está no chão...";
 
 
     betStatus.textContent =
-        "Aguarda a descolagem.";
+        "A águia está a preparar-se.";
 
 
     betButton.textContent =
@@ -653,38 +1118,78 @@ function iniciarVoo() {
 
 
     /*
-       A duração do voo verdadeiro.
+       Começa a bater as asas.
     */
 
-    fimVoo =
-        9000 +
-        Math.random() * 9000;
+    iniciarBatimentoAsas();
 
 
     /*
-       Pequena preparação
-       antes de começar a bater asas.
+       Fica alguns segundos
+       a bater as asas no chão.
     */
 
-    setTimeout(() => {
+    timerPreparacao =
+        setTimeout(
+            () => {
 
-        if (!vooAtivo) {
+                if (!vooAtivo) {
 
-            return;
+                    return;
 
-        }
-
-
-        statusElement.textContent =
-            "A águia está a bater as asas...";
+                }
 
 
-        animationFrame =
-            requestAnimationFrame(
-                animarVoo
-            );
+                iniciarDescolagem();
 
-    }, 1000);
+            },
+            2500
+        );
+
+}
+
+
+/* =========================================
+   INICIAR DESCOLAGEM
+========================================= */
+
+function iniciarDescolagem() {
+
+    if (!vooAtivo) {
+
+        return;
+
+    }
+
+
+    estadoVoo =
+        "descolando";
+
+
+    tempoDescolagem =
+        0;
+
+
+    statusElement.textContent =
+        "A águia está a levantar voo...";
+
+
+    betStatus.textContent =
+        "Aguarda a águia chegar ao alto.";
+
+
+    /*
+       Continua a bater as asas
+       durante a subida.
+    */
+
+    iniciarBatimentoAsas();
+
+
+    animationFrame =
+        requestAnimationFrame(
+            animarDescolagem
+        );
 
 }
 
@@ -706,20 +1211,15 @@ function iniciarQueda() {
         "caindo";
 
 
-    statusElement.textContent =
-        "A águia está a cair...";
-
-
     /*
-       Congelar o multiplicador
-       no valor final.
+       Para o cenário.
     */
 
-    atualizarMultiplicador();
+    pararMovimentoCenario();
 
 
     /*
-       Cancelar animação anterior.
+       Para a animação principal.
     */
 
     if (animationFrame) {
@@ -728,12 +1228,35 @@ function iniciarQueda() {
             animationFrame
         );
 
+        animationFrame =
+            null;
+
     }
 
 
     /*
-       Começar queda.
+       Multiplicador fica congelado
+       no valor final.
     */
+
+    atualizarMultiplicador();
+
+
+    statusElement.textContent =
+        "VOO TERMINOU";
+
+
+    /*
+       Continua a bater as asas
+       durante a queda.
+    */
+
+    iniciarBatimentoAsas();
+
+
+    tempoQuedaInicio =
+        0;
+
 
     requestAnimationFrame(
         animarQueda
@@ -743,13 +1266,19 @@ function iniciarQueda() {
 
 
 /* =========================================
-   ANIMAÇÃO DA QUEDA
+   QUEDA
 ========================================= */
 
 function animarQueda(timestamp) {
 
-    const duracaoQueda =
-        1800;
+    if (
+        estadoVoo !==
+        "caindo"
+    ) {
+
+        return;
+
+    }
 
 
     if (!tempoQuedaInicio) {
@@ -760,14 +1289,17 @@ function animarQueda(timestamp) {
     }
 
 
+    const duracao =
+        1800;
+
+
     const tempo =
         timestamp -
         tempoQuedaInicio;
 
 
     let progresso =
-        tempo /
-        duracaoQueda;
+        tempo / duracao;
 
 
     if (progresso > 1) {
@@ -778,7 +1310,8 @@ function animarQueda(timestamp) {
 
 
     /*
-       Suavização.
+       Queda suave no início
+       e mais rápida depois.
     */
 
     const suavizado =
@@ -786,33 +1319,46 @@ function animarQueda(timestamp) {
         progresso;
 
 
-    /*
-       Começa alto e vai para o chão.
-    */
+    const posicaoInicial =
+        POSICAO_ALTA;
 
-    const alturaInicial =
-        145 +
-        Math.min(
-            fimVoo / 1000 * 10,
-            250
+
+    const posicaoFinal =
+        POSICAO_CHAO;
+
+
+    const posicao =
+        posicaoInicial +
+        (
+            (posicaoFinal -
+            posicaoInicial) *
+            suavizado
         );
 
 
-    const altura =
-        alturaInicial *
-        (1 - suavizado);
-
-
     const inclinacao =
-        10 +
-        suavizado * 18;
+        -4 +
+        (suavizado * 20);
 
 
-    moverAguia(
-        altura,
-        inclinacao,
-        1 -
-        suavizado * 0.05
+    const escala =
+        1.03 -
+        (suavizado * 0.03);
+
+
+    eagleElement.style.setProperty(
+        "top",
+        posicao + "%",
+        "important"
+    );
+
+
+    eagleElement.style.setProperty(
+        "transform",
+        `translate(-50%, -50%)
+         rotate(${inclinacao}deg)
+         scale(${escala})`,
+        "important"
     );
 
 
@@ -830,13 +1376,6 @@ function animarQueda(timestamp) {
     );
 
 }
-
-
-/* =========================================
-   VARIÁVEL DA QUEDA
-========================================= */
-
-let tempoQuedaInicio = 0;
 
 
 /* =========================================
@@ -860,9 +1399,12 @@ function finalizarQueda() {
     colocarAguiaNoChao();
 
 
+    pararBatimentoAsas();
+
+
     /*
-       Se havia aposta ativa,
-       perdeu quando o voo terminou.
+       Se apostou e não retirou:
+       perdeu a aposta.
     */
 
     if (
@@ -886,13 +1428,14 @@ function finalizarQueda() {
 
 
     /*
-       Preparar próxima rodada.
+       Próxima rodada.
     */
 
-    setTimeout(
-        prepararNovoVoo,
-        3500
-    );
+    timerQueda =
+        setTimeout(
+            prepararNovoVoo,
+            3500
+        );
 
 }
 
@@ -922,8 +1465,8 @@ function prepararNovoVoo() {
 
 
     /*
-       Pequena pausa no chão
-       antes da próxima descolagem.
+       Pequena pausa antes
+       de começar novamente.
     */
 
     setTimeout(
@@ -986,6 +1529,10 @@ atualizarMultiplicador();
 
 colocarAguiaNoChao();
 
+pararBatimentoAsas();
+
+pararMovimentoCenario();
+
 
 statusElement.textContent =
     "A águia está no chão...";
@@ -1003,4 +1550,3 @@ setTimeout(
     iniciarVoo,
     2500
 );
-```
