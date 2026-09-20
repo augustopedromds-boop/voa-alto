@@ -415,9 +415,17 @@ function prepararCenarioInfinito() {
     */
 
     const elementosOriginais =
-        Array.from(
-            skyElement.children
-        );
+    Array.from(
+        skyElement.children
+    ).filter(elemento => {
+
+        /*
+           A águia NUNCA entra no cenário móvel.
+        */
+
+        return elemento.id !== "eagle";
+
+    });
 
 
     /*
