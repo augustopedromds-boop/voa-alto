@@ -91,12 +91,41 @@ const skyElement =
 
 
 /* =========================================
-   POSIÇÕES DA ÁGUIA
+   TRAJETÓRIA DO VOO
 ========================================= */
 
 const POSICAO_CHAO = 78;
 
-const POSICAO_ALTA = 42;
+/*
+   Posição onde a águia entra
+   no voo verdadeiro.
+*/
+
+const VOO_INICIO_X = 38;
+const VOO_INICIO_Y = 70;
+
+
+/*
+   Limites da trajetória.
+
+   A águia vai avançar para a direita
+   enquanto sobe.
+*/
+
+const VOO_FIM_X = 82;
+const VOO_FIM_Y = 20;
+
+
+/*
+   Elementos do gráfico.
+*/
+
+let flightGraph = null;
+let flightPath = null;
+let flightGlow = null;
+let flightDot = null;
+
+let pontosVoo = [];
 
 
 /* =========================================
@@ -182,24 +211,16 @@ function colocarAguiaNoAlto() {
 
 
 /* =========================================
-   MOVER ÁGUIA DURANTE DESCOLAGEM
+   DESCOLAGEM
 ========================================= */
 
 function moverAguiaDuranteDescolagem(progresso) {
 
     if (!eagleElement) return;
 
-    const inicio =
-        POSICAO_CHAO;
-
-    const fim =
-        POSICAO_ALTA;
 
     /*
-       Suavização:
-       começa devagar,
-       acelera,
-       termina suavemente.
+       Suavização da subida.
     */
 
     const suavizado =
@@ -207,26 +228,66 @@ function moverAguiaDuranteDescolagem(progresso) {
         progresso *
         (3 - 2 * progresso);
 
-    const posicao =
+
+    /*
+       Movimento vertical.
+    */
+
+    const inicio =
+        POSICAO_CHAO;
+
+    const fim =
+        VOO_INICIO_Y;
+
+
+    const posicaoY =
         inicio -
         (
             (inicio - fim) *
             suavizado
         );
 
+
+    /*
+       Pequeno avanço horizontal
+       durante a descolagem.
+    */
+
+    const posicaoX =
+        50 -
+        (
+            (50 - VOO_INICIO_X) *
+            suavizado
+        );
+
+
+    /*
+       Inclinação do corpo.
+    */
+
     const inclinacao =
         -3 -
-        (suavizado * 8);
+        (suavizado * 7);
+
 
     const escala =
         1 +
-        (suavizado * 0.03);
+        (suavizado * 0.04);
+
+
+    eagleElement.style.setProperty(
+        "left",
+        posicaoX + "%",
+        "important"
+    );
+
 
     eagleElement.style.setProperty(
         "top",
-        posicao + "%",
+        posicaoY + "%",
         "important"
     );
+
 
     eagleElement.style.setProperty(
         "transform",
@@ -1283,7 +1344,7 @@ function animarDescolagem(timestamp) {
 
 
 /* =========================================
-   INICIAR VOO NO ALTO
+   INICIAR VOO ALTO
 ========================================= */
 
 function iniciarVooAlto() {
@@ -1303,12 +1364,47 @@ function iniciarVooAlto() {
     atualizarMultiplicador();
 
 
-    colocarAguiaNoAlto();
+    /*
+       Posicionar exatamente
+       no início da trajetória.
+    */
+
+    eagleElement.style.setProperty(
+        "left",
+        VOO_INICIO_X + "%",
+        "important"
+    );
+
+
+    eagleElement.style.setProperty(
+        "top",
+        VOO_INICIO_Y + "%",
+        "important"
+    );
+
+
+    eagleElement.style.setProperty(
+        "transform",
+        `translate(-50%, -50%)
+         rotate(-7deg)
+         scale(1.03)`,
+        "important"
+    );
 
 
     /*
-       Agora sim:
-       começa a sensação de voo.
+       Criar e mostrar gráfico.
+    */
+
+    criarGraficoVoo();
+
+    limparGraficoVoo();
+
+    mostrarGraficoVoo();
+
+
+    /*
+       Começar cenário.
     */
 
     iniciarMovimentoCenario();
@@ -1323,7 +1419,7 @@ function iniciarVooAlto() {
 
 
     /*
-       Duração do voo verdadeiro.
+       Duração aleatória.
     */
 
     fimVoo =
@@ -1338,9 +1434,261 @@ function iniciarVooAlto() {
 
 }
 
+/* =========================================
+   CRIAR GRÁFICO DE VOO
+========================================= */
+
+function criarGraficoVoo() {
+
+    const flight =
+        document.querySelector(".flight");
+
+    if (!flight) return;
+
+
+    /*
+       Se já existir, não cria novamente.
+    */
+
+    if (flightGraph) return;
+
+
+    /*
+       Criar SVG.
+    */
+
+    flightGraph =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "svg"
+        );
+
+
+    flightGraph.setAttribute(
+        "id",
+        "voaFlightGraph"
+    );
+
+
+    flightGraph.setAttribute(
+        "viewBox",
+        "0 0 100 100"
+    );
+
+
+    flightGraph.setAttribute(
+        "preserveAspectRatio",
+        "none"
+    );
+
+
+    /*
+       Brilho da trajetória.
+    */
+
+    flightGlow =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "polyline"
+        );
+
+
+    flightGlow.setAttribute(
+        "id",
+        "voaFlightGlow"
+    );
+
+
+    /*
+       Linha principal.
+    */
+
+    flightPath =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "polyline"
+        );
+
+
+    flightPath.setAttribute(
+        "id",
+        "voaFlightPath"
+    );
+
+
+    /*
+       Ponto da águia.
+    */
+
+    flightDot =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "circle"
+        );
+
+
+    flightDot.setAttribute(
+        "id",
+        "voaFlightDot"
+    );
+
+
+    flightDot.setAttribute(
+        "r",
+        "0.9"
+    );
+
+
+    flightGraph.appendChild(
+        flightGlow
+    );
+
+
+    flightGraph.appendChild(
+        flightPath
+    );
+
+
+    flightGraph.appendChild(
+        flightDot
+    );
+
+
+    flight.appendChild(
+        flightGraph
+    );
+
+}
+
 
 /* =========================================
-   VOO
+   LIMPAR GRÁFICO
+========================================= */
+
+function limparGraficoVoo() {
+
+    pontosVoo = [];
+
+
+    if (!flightPath) return;
+
+
+    flightPath.setAttribute(
+        "points",
+        ""
+    );
+
+
+    flightGlow.setAttribute(
+        "points",
+        ""
+    );
+
+
+    flightDot.setAttribute(
+        "cx",
+        VOO_INICIO_X
+    );
+
+
+    flightDot.setAttribute(
+        "cy",
+        VOO_INICIO_Y
+    );
+
+}
+
+
+/* =========================================
+   ATUALIZAR GRÁFICO
+========================================= */
+
+function atualizarGraficoVoo(
+    x,
+    y
+) {
+
+    if (!flightPath) return;
+
+
+    /*
+       Guardar ponto.
+    */
+
+    pontosVoo.push(
+        `${x},${y}`
+    );
+
+
+    /*
+       Limitar quantidade de pontos
+       para não ficar pesado.
+    */
+
+    if (pontosVoo.length > 180) {
+
+        pontosVoo.shift();
+
+    }
+
+
+    const pontos =
+        pontosVoo.join(" ");
+
+
+    flightPath.setAttribute(
+        "points",
+        pontos
+    );
+
+
+    flightGlow.setAttribute(
+        "points",
+        pontos
+    );
+
+
+    flightDot.setAttribute(
+        "cx",
+        x
+    );
+
+
+    flightDot.setAttribute(
+        "cy",
+        y
+    );
+
+}
+
+
+/* =========================================
+   ESCONDER GRÁFICO
+========================================= */
+
+function esconderGraficoVoo() {
+
+    if (!flightGraph) return;
+
+    flightGraph.style.opacity = "0";
+
+}
+
+
+/* =========================================
+   MOSTRAR GRÁFICO
+========================================= */
+
+function mostrarGraficoVoo() {
+
+    if (!flightGraph) return;
+
+    flightGraph.style.opacity = "1";
+
+}
+
+/* =========================================
+   VOO CRESCENTE
 ========================================= */
 
 function animarVoo(timestamp) {
@@ -1362,6 +1710,11 @@ function animarVoo(timestamp) {
     }
 
 
+    /*
+       Tempo desde o início
+       do voo verdadeiro.
+    */
+
     const tempoVoo =
         (
             timestamp -
@@ -1370,8 +1723,23 @@ function animarVoo(timestamp) {
 
 
     /*
-       Multiplicador
+       Progresso da rodada.
+
+       0 = início
+       1 = final
     */
+
+    const progresso =
+        Math.min(
+            tempoVoo /
+            (fimVoo / 1000),
+            1
+        );
+
+
+    /* =====================================
+       MULTIPLICADOR
+    ====================================== */
 
     multiplicador =
         1 +
@@ -1385,43 +1753,149 @@ function animarVoo(timestamp) {
     verificarAutoCashout();
 
 
+    /* =====================================
+       MOVIMENTO HORIZONTAL
+    ====================================== */
+
+    const xBase =
+        VOO_INICIO_X +
+        (
+            (VOO_FIM_X -
+            VOO_INICIO_X) *
+            progresso
+        );
+
+
     /*
-       A águia NÃO continua a subir.
-       Fica no alto.
+       Pequena ondulação horizontal.
     */
 
-    const pequenaOscilacao =
+    const oscilacaoX =
         Math.sin(
-            tempoVoo * 2.4
-        ) * 2;
+            tempoVoo * 1.7
+        ) * 1.2;
 
+
+    const x =
+        xBase +
+        oscilacaoX;
+
+
+    /* =====================================
+       MOVIMENTO VERTICAL
+    ====================================== */
+
+    /*
+       A curva sobe progressivamente.
+    */
+
+    const curva =
+        Math.pow(
+            progresso,
+            0.78
+        );
+
+
+    const yBase =
+        VOO_INICIO_Y -
+        (
+            (
+                VOO_INICIO_Y -
+                VOO_FIM_Y
+            ) *
+            curva
+        );
+
+
+    /*
+       Movimento de voo.
+
+       A águia sobe e desce
+       suavemente enquanto avança.
+    */
+
+    const oscilacaoY =
+        Math.sin(
+            tempoVoo * 2.6
+        ) * 2.2;
+
+
+    const y =
+        yBase +
+        oscilacaoY;
+
+
+    /* =====================================
+       INCLINAÇÃO
+    ====================================== */
+
+    /*
+       Inclina para cima
+       e acompanha o movimento.
+    */
+
+    const inclinacao =
+        -8 +
+        (
+            Math.sin(
+                tempoVoo * 2.2
+            ) * 3
+        );
+
+
+    /*
+       Pequena variação de escala.
+    */
+
+    const escala =
+        1.03 +
+        (
+            Math.sin(
+                tempoVoo * 2
+            ) * 0.015
+        );
+
+
+    /* =====================================
+       APLICAR POSIÇÃO DA ÁGUIA
+    ====================================== */
 
     eagleElement.style.setProperty(
-        "top",
-        (POSICAO_ALTA + pequenaOscilacao) + "%",
+        "left",
+        x + "%",
         "important"
     );
 
 
-    const inclinacao =
-        -4 +
-        Math.sin(
-            tempoVoo * 2
-        ) * 3;
+    eagleElement.style.setProperty(
+        "top",
+        y + "%",
+        "important"
+    );
 
 
     eagleElement.style.setProperty(
         "transform",
         `translate(-50%, -50%)
          rotate(${inclinacao}deg)
-         scale(1.03)`,
+         scale(${escala})`,
         "important"
     );
 
 
-    /*
-       Finalizar voo
-    */
+    /* =====================================
+       GRÁFICO
+    ====================================== */
+
+    atualizarGraficoVoo(
+        x,
+        y
+    );
+
+
+    /* =====================================
+       FINALIZAR RODADA
+    ====================================== */
 
     if (
         timestamp -
@@ -1442,7 +1916,6 @@ function animarVoo(timestamp) {
         );
 
 }
-
 
 /* =========================================
    INICIAR RODADA
@@ -1485,14 +1958,15 @@ function iniciarVoo() {
         0;
 
 
-    atualizarMultiplicador();
+   pararMovimentoCenario();
 
+colocarAguiaNoChao();
 
-    pararMovimentoCenario();
+criarGraficoVoo();
 
+limparGraficoVoo();
 
-    colocarAguiaNoChao();
-
+esconderGraficoVoo();
 
     /*
        Primeiro:
