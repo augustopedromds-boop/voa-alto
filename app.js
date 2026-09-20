@@ -389,7 +389,7 @@ function pararBatimentoAsas() {
 
 
 /* =========================================
-   FUNDO — CICLO INFINITO PARA A ESQUERDA
+   FUNDO — MOVIMENTO CONTÍNUO PARA A ESQUERDA
 ========================================= */
 
 let cenarioAnimacao = null;
@@ -398,39 +398,40 @@ function iniciarMovimentoCenario() {
 
     if (!skyElement) return;
 
+
     /*
-       Evita criar duas animações
-       ao mesmo tempo.
+       Se já existir uma animação,
+       elimina antes de criar outra.
     */
 
     pararMovimentoCenario();
 
 
     /*
-       O cenário inteiro é tratado
-       como uma única viagem para a esquerda.
-
-       Não usamos alternate.
-       Não volta para trás.
-
-       Quando termina, reinicia.
+       O céu inteiro começa a deslocar-se
+       continuamente para a esquerda.
     */
 
     cenarioAnimacao =
         skyElement.animate(
             [
                 {
-                    transform: "translateX(0)"
+                    transform: "translateX(0%)"
                 },
                 {
-                    transform: "translateX(-18%)"
+                    transform: "translateX(-50%)"
                 }
             ],
             {
-                duration: 4200,
+                duration: 6000,
+
                 iterations: Infinity,
+
                 direction: "normal",
-                easing: "linear"
+
+                easing: "linear",
+
+                fill: "none"
             }
         );
 
@@ -438,7 +439,7 @@ function iniciarMovimentoCenario() {
 
 
 /* =========================================
-   PARAR FUNDO
+   PARAR MOVIMENTO DO FUNDO
 ========================================= */
 
 function pararMovimentoCenario() {
@@ -452,15 +453,15 @@ function pararMovimentoCenario() {
 
     }
 
+
     if (skyElement) {
 
         skyElement.style.transform =
-            "translateX(0)";
+            "translateX(0%)";
 
     }
 
 }
-
 
 /* =========================================
    PLUS
