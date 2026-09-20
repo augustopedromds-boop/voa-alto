@@ -95,6 +95,7 @@ const skyElement =
 ========================================= */
 
 const POSICAO_CHAO = 78;
+const POSICAO_ALTA = VOO_FIM_Y;
 
 /*
    Posição onde a águia entra
@@ -115,6 +116,8 @@ const VOO_INICIO_Y = 70;
 const VOO_FIM_X = 82;
 const VOO_FIM_Y = 20;
 
+let ultimaPosicaoX = VOO_INICIO_X;
+let ultimaPosicaoY = VOO_INICIO_Y;
 
 /*
    Elementos do gráfico.
@@ -1824,7 +1827,9 @@ function animarVoo(timestamp) {
         yBase +
         oscilacaoY;
 
-
+ultimaPosicaoX = x;
+ultimaPosicaoY = y;
+   
     /* =====================================
        INCLINAÇÃO
     ====================================== */
@@ -2194,8 +2199,8 @@ function animarQueda(timestamp) {
 
 
     /*
-       Queda suave no início
-       e mais rápida depois.
+       Começa exatamente
+       onde a águia terminou o voo.
     */
 
     const suavizado =
@@ -2204,7 +2209,7 @@ function animarQueda(timestamp) {
 
 
     const posicaoInicial =
-        POSICAO_ALTA;
+        ultimaPosicaoY;
 
 
     const posicaoFinal =
@@ -2220,14 +2225,45 @@ function animarQueda(timestamp) {
         );
 
 
+    /*
+       Durante a queda,
+       a águia continua no lado
+       onde terminou o voo.
+    */
+
+    const posicaoX =
+        ultimaPosicaoX +
+        (
+            Math.sin(
+                progresso * Math.PI
+            ) * 2
+        );
+
+
+    /*
+       Vai inclinando o corpo
+       enquanto cai.
+    */
+
     const inclinacao =
         -4 +
-        (suavizado * 20);
+        (
+            suavizado * 24
+        );
 
 
     const escala =
         1.03 -
-        (suavizado * 0.03);
+        (
+            suavizado * 0.03
+        );
+
+
+    eagleElement.style.setProperty(
+        "left",
+        posicaoX + "%",
+        "important"
+    );
 
 
     eagleElement.style.setProperty(
@@ -2246,7 +2282,9 @@ function animarQueda(timestamp) {
     );
 
 
-    if (progresso >= 1) {
+    if (
+        progresso >= 1
+    ) {
 
         finalizarQueda();
 
