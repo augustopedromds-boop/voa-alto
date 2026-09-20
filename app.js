@@ -389,10 +389,331 @@ function pararBatimentoAsas() {
 
 
 /* =========================================
-   FUNDO — MOVIMENTO CONTÍNUO PARA A ESQUERDA
+   FUNDO INFINITO
+   DUAS CÓPIAS DO CENÁRIO
 ========================================= */
 
 let cenarioAnimacao = null;
+let cenarioTrack = null;
+let cenarioPreparado = false;
+
+
+/* =========================================
+   CRIAR CENÁRIO DUPLO
+========================================= */
+
+function prepararCenarioInfinito() {
+
+    if (!skyElement) return;
+
+    if (cenarioPreparado) return;
+
+
+    /*
+       Guarda todos os elementos atuais
+       do cenário.
+    */
+
+    const elementosOriginais =
+        Array.from(
+            skyElement.children
+        );
+
+
+    /*
+       Cria a pista que vai transportar
+       os dois cenários.
+    */
+
+    cenarioTrack =
+        document.createElement("div");
+
+
+    cenarioTrack.className =
+        "voa-cenario-track";
+
+
+    cenarioTrack.style.position =
+        "absolute";
+
+    cenarioTrack.style.top =
+        "0";
+
+    cenarioTrack.style.left =
+        "0";
+
+    cenarioTrack.style.width =
+        "200%";
+
+    cenarioTrack.style.height =
+        "100%";
+
+    cenarioTrack.style.display =
+        "flex";
+
+    cenarioTrack.style.pointerEvents =
+        "none";
+
+    cenarioTrack.style.zIndex =
+        "1";
+
+
+    /*
+       PRIMEIRO CENÁRIO
+    */
+
+    const cenario1 =
+        document.createElement("div");
+
+    cenario1.className =
+        "voa-cenario-painel voa-cenario-1";
+
+
+    cenario1.style.position =
+        "relative";
+
+    cenario1.style.width =
+        "50%";
+
+    cenario1.style.height =
+        "100%";
+
+    cenario1.style.flex =
+        "0 0 50%";
+
+    cenario1.style.overflow =
+        "hidden";
+
+
+    /*
+       SEGUNDO CENÁRIO
+    */
+
+    const cenario2 =
+        document.createElement("div");
+
+    cenario2.className =
+        "voa-cenario-painel voa-cenario-2";
+
+
+    cenario2.style.position =
+        "relative";
+
+    cenario2.style.width =
+        "50%";
+
+    cenario2.style.height =
+        "100%";
+
+    cenario2.style.flex =
+        "0 0 50%";
+
+    cenario2.style.overflow =
+        "hidden";
+
+
+    /*
+       Coloca os elementos originais
+       no primeiro cenário.
+    */
+
+    elementosOriginais.forEach(
+        elemento => {
+
+            cenario1.appendChild(
+                elemento
+            );
+
+        }
+    );
+
+
+    /*
+       Cria a segunda cópia.
+    */
+
+    elementosOriginais.forEach(
+        elemento => {
+
+            const copia =
+                elemento.cloneNode(true);
+
+            cenario2.appendChild(
+                copia
+            );
+
+        }
+    );
+
+
+    /*
+       Adiciona os dois cenários
+       à pista.
+    */
+
+    cenarioTrack.appendChild(
+        cenario1
+    );
+
+    cenarioTrack.appendChild(
+        cenario2
+    );
+
+
+    /*
+       Coloca a pista dentro do SKY.
+    */
+
+    skyElement.appendChild(
+        cenarioTrack
+    );
+
+
+    /*
+       Pequenas diferenças no segundo cenário.
+    */
+
+    diferenciarSegundoCenario(
+        cenario2
+    );
+
+
+    /*
+       Garante que o cenário
+       fica atrás da águia.
+    */
+
+    skyElement.style.position =
+        "absolute";
+
+    skyElement.style.overflow =
+        "hidden";
+
+
+    cenarioPreparado =
+        true;
+
+}
+
+
+/* =========================================
+   DIFERENCIAR SEGUNDO CENÁRIO
+========================================= */
+
+function diferenciarSegundoCenario(
+    cenario
+) {
+
+    /*
+       NUVEM 1
+    */
+
+    const cloud1 =
+        cenario.querySelector(
+            ".cloud-1"
+        );
+
+    if (cloud1) {
+
+        cloud1.style.left =
+            "28%";
+
+    }
+
+
+    /*
+       NUVEM 2
+    */
+
+    const cloud2 =
+        cenario.querySelector(
+            ".cloud-2"
+        );
+
+    if (cloud2) {
+
+        cloud2.style.right =
+            "12%";
+
+    }
+
+
+    /*
+       NUVEM 3
+    */
+
+    const cloud3 =
+        cenario.querySelector(
+            ".cloud-3"
+        );
+
+    if (cloud3) {
+
+        cloud3.style.left =
+            "62%";
+
+    }
+
+
+    /*
+       MONTANHAS DE FUNDO
+    */
+
+    const mountainsBack =
+        cenario.querySelector(
+            ".mountains-back"
+        );
+
+    if (mountainsBack) {
+
+        mountainsBack.style.left =
+            "8%";
+
+    }
+
+
+    /*
+       MONTANHAS DA FRENTE
+    */
+
+    const mountainsFront =
+        cenario.querySelector(
+            ".mountains-front"
+        );
+
+    if (mountainsFront) {
+
+        mountainsFront.style.left =
+            "4%";
+
+    }
+
+
+    /*
+       ÁRVORES
+
+       Deslocamos ligeiramente
+       o conjunto das árvores.
+    */
+
+    const trees =
+        cenario.querySelector(
+            ".park-trees"
+        );
+
+    if (trees) {
+
+        trees.style.transform =
+            "translateX(70px)";
+
+    }
+
+}
+
+
+/* =========================================
+   INICIAR FUNDO INFINITO
+========================================= */
 
 function iniciarMovimentoCenario() {
 
@@ -400,43 +721,96 @@ function iniciarMovimentoCenario() {
 
 
     /*
-       Se já existir uma animação,
-       elimina antes de criar outra.
+       Cria os dois cenários
+       apenas uma vez.
+    */
+
+    prepararCenarioInfinito();
+
+
+    /*
+       Cancela animação anterior.
     */
 
     pararMovimentoCenario();
 
 
     /*
-       O céu inteiro começa a deslocar-se
-       continuamente para a esquerda.
+       Reinicia a pista.
+    */
+
+    cenarioTrack.style.transform =
+        "translateX(0)";
+
+
+    /*
+       A pista tem 200% da largura.
+
+       Cada cenário ocupa 50% da pista.
+
+       Portanto, mover 50% da pista
+       faz exatamente um cenário
+       desaparecer pela esquerda.
+
+       O segundo já está atrás dele.
     */
 
     cenarioAnimacao =
-        skyElement.animate(
+        cenarioTrack.animate(
             [
                 {
-                    transform: "translateX(0%)"
+                    transform:
+                        "translateX(0)"
                 },
                 {
-                    transform: "translateX(-50%)"
+                    transform:
+                        "translateX(-50%)"
                 }
             ],
             {
-                duration: 6000,
+                duration: 7000,
 
-                iterations: Infinity,
+                iterations:
+                    Infinity,
 
-                direction: "normal",
+                direction:
+                    "normal",
 
-                easing: "linear",
+                easing:
+                    "linear",
 
-                fill: "none"
+                fill:
+                    "none"
             }
         );
 
 }
 
+
+/* =========================================
+   PARAR FUNDO
+========================================= */
+
+function pararMovimentoCenario() {
+
+    if (cenarioAnimacao) {
+
+        cenarioAnimacao.cancel();
+
+        cenarioAnimacao =
+            null;
+
+    }
+
+
+    if (cenarioTrack) {
+
+        cenarioTrack.style.transform =
+            "translateX(0)";
+
+    }
+
+}
 
 /* =========================================
    PARAR MOVIMENTO DO FUNDO
