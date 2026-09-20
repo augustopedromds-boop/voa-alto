@@ -732,37 +732,41 @@ function diferenciarSegundoCenario(
 ========================================= */
 
 function iniciarMovimentoCenario() {
-    if (!skyElement) return;
-
-    prepararCenarioInfinito();
+    if (!skyElement || !cenarioTrack) return;
 
     pararMovimentoCenario();
 
-    let inicio = performance.now();
-    const duracao = 7000;
+    const larguraTela = skyElement.clientWidth;
 
-    function moverAgora(agora) {
+    if (!larguraTela) return;
+
+    let inicio = performance.now();
+
+    // Tempo para um cenário inteiro atravessar a tela
+    const duracao = 10000;
+
+    function animar(agora) {
         if (!cenarioTrack) return;
 
-        const tempo = (agora - inicio) % duracao;
-        const progresso = tempo / duracao;
+        const decorrido = agora - inicio;
 
-        // Move exatamente 50% da largura total do track
-        const deslocamento = progresso * 50;
+        // Posição entre 0 e -larguraTela
+        const progresso =
+            (decorrido % duracao) / duracao;
+
+        const deslocamento =
+            progresso * larguraTela;
 
         cenarioTrack.style.transform =
-            `translate3d(-${deslocamento}%, 0, 0)`;
+            `translate3d(-${deslocamento}px, 0, 0)`;
 
         cenarioAnimacao =
-            requestAnimationFrame(moverAgora);
+            requestAnimationFrame(animar);
     }
 
-    inicio = performance.now();
-
     cenarioAnimacao =
-        requestAnimationFrame(moverAgora);
+        requestAnimationFrame(animar);
 }
-
 
 /* =========================================
    PARAR MOVIMENTO DO FUNDO
