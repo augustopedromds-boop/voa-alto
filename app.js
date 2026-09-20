@@ -736,89 +736,54 @@ function iniciarMovimentoCenario() {
 
     prepararCenarioInfinito();
 
-    pararMovimentoCenario();
-
     if (!cenarioTrack) return;
 
-    const painel1 = cenarioTrack.querySelector(".voa-cenario-1");
-    const painel2 = cenarioTrack.querySelector(".voa-cenario-2");
-
-    if (!painel1 || !painel2) return;
+    pararMovimentoCenario();
 
     const largura = skyElement.clientWidth;
 
     if (!largura) return;
 
-    /*
-       O track passa a ocupar somente a tela.
-       Os dois cenários ficam um atrás do outro.
-    */
-    cenarioTrack.style.width = "100%";
-    cenarioTrack.style.height = "100%";
-    cenarioTrack.style.position = "absolute";
-    cenarioTrack.style.left = "0";
-    cenarioTrack.style.top = "0";
-    cenarioTrack.style.transform = "none";
+    const duracao = 10000;
 
-    painel1.style.position = "absolute";
-    painel1.style.width = `${largura}px`;
-    painel1.style.height = "100%";
-    painel1.style.left = "0";
-    painel1.style.top = "0";
-    painel1.style.flex = "none";
+    // Cada painel ocupa exatamente uma tela
+    cenarioTrack.style.width = "200%";
+    cenarioTrack.style.display = "flex";
+    cenarioTrack.style.transform = "translateX(0)";
 
-    painel2.style.position = "absolute";
-    painel2.style.width = `${largura}px`;
-    painel2.style.height = "100%";
-    painel2.style.left = `${largura}px`;
-    painel2.style.top = "0";
-    painel2.style.flex = "none";
+    const paineis =
+        cenarioTrack.querySelectorAll(".voa-cenario-painel");
 
-    let posicao1 = 0;
-    let posicao2 = largura;
+    paineis.forEach(painel => {
+        painel.style.width = "50%";
+        painel.style.flex = "0 0 50%";
+    });
 
-    let ultimoTempo = performance.now();
+    let inicio = performance.now();
 
-    // Velocidade do cenário
-    const velocidade = largura / 10;
+    function animar(agora) {
 
-    function mover(tempoAtual) {
+        if (!cenarioTrack) return;
 
-        const delta =
-            (tempoAtual - ultimoTempo) / 1000;
-
-        ultimoTempo = tempoAtual;
-
-        posicao1 -= velocidade * delta;
-        posicao2 -= velocidade * delta;
+        const progresso =
+            ((agora - inicio) % duracao) / duracao;
 
         /*
-           Quando o cenário sai completamente
-           pela esquerda, ele volta para a direita,
-           mas já fora da tela.
+          O track tem 200%.
+          -50% = exatamente uma tela inteira.
         */
-        if (posicao1 <= -largura) {
-            posicao1 = posicao2 + largura;
-        }
+        const deslocamento = progresso * 50;
 
-        if (posicao2 <= -largura) {
-            posicao2 = posicao1 + largura;
-        }
-
-        painel1.style.transform =
-            `translate3d(${posicao1}px, 0, 0)`;
-
-        painel2.style.transform =
-            `translate3d(${posicao2}px, 0, 0)`;
+        cenarioTrack.style.transform =
+            `translate3d(-${deslocamento}%, 0, 0)`;
 
         cenarioAnimacao =
-            requestAnimationFrame(mover);
+            requestAnimationFrame(animar);
     }
 
     cenarioAnimacao =
-        requestAnimationFrame(mover);
+        requestAnimationFrame(animar);
 }
-
 /* =========================================
    PARAR MOVIMENTO DO FUNDO
 ========================================= */
