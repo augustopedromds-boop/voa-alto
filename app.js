@@ -240,16 +240,31 @@ function moverAguiaDuranteDescolagem(progresso) {
 
 
 /* =========================================
-   ANIMAÇÃO REAL DAS ASAS
+   BATER ASAS — 8 FRAMES DO SPRITE
 ========================================= */
+
+let intervaloAsas = null;
+
+const framesAsas = [
+    "0% 0%",
+    "33.333% 0%",
+    "66.666% 0%",
+    "100% 0%",
+
+    "0% 100%",
+    "33.333% 100%",
+    "66.666% 100%",
+    "100% 100%"
+];
+
 
 function iniciarBatimentoAsas() {
 
     if (!eagleSprite) return;
 
     /*
-       Reinicia a animação para garantir
-       que começa sempre no primeiro frame.
+       Primeiro limpa qualquer animação CSS
+       que possa estar a interferir.
     */
 
     eagleSprite.style.setProperty(
@@ -258,25 +273,111 @@ function iniciarBatimentoAsas() {
         "important"
     );
 
+
     /*
-       Força o navegador a reiniciar
-       a animação.
+       Garante o tamanho correto
+       da folha de sprites.
     */
 
-    void eagleSprite.offsetWidth;
-
     eagleSprite.style.setProperty(
-        "animation",
-        "eagle-wings 0.58s steps(1) infinite",
+        "background-size",
+        "400% 200%",
         "important"
     );
+
+
+    eagleSprite.style.setProperty(
+        "background-repeat",
+        "no-repeat",
+        "important"
+    );
+
+
+    /*
+       Cancela animação anterior.
+    */
+
+    if (intervaloAsas) {
+
+        clearInterval(
+            intervaloAsas
+        );
+
+    }
+
+
+    let frameAtual = 0;
+
+
+    /*
+       Primeiro frame.
+    */
+
+    eagleSprite.style.setProperty(
+        "background-position",
+        framesAsas[frameAtual],
+        "important"
+    );
+
+
+    /*
+       Troca os frames continuamente.
+       90 ms = movimento rápido das asas.
+    */
+
+    intervaloAsas =
+        setInterval(() => {
+
+            frameAtual++;
+
+            if (
+                frameAtual >=
+                framesAsas.length
+            ) {
+
+                frameAtual = 0;
+
+            }
+
+
+            eagleSprite.style.setProperty(
+                "background-position",
+                framesAsas[frameAtual],
+                "important"
+            );
+
+        }, 90);
 
 }
 
 
 function pararBatimentoAsas() {
 
+    if (intervaloAsas) {
+
+        clearInterval(
+            intervaloAsas
+        );
+
+        intervaloAsas =
+            null;
+
+    }
+
+
     if (!eagleSprite) return;
+
+
+    /*
+       Para no primeiro frame.
+    */
+
+    eagleSprite.style.setProperty(
+        "background-position",
+        "0% 0%",
+        "important"
+    );
+
 
     eagleSprite.style.setProperty(
         "animation",
