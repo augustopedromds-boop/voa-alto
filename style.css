@@ -1993,3 +1993,27 @@ body {
     display: none !important;
     visibility: hidden !important;
 }
+
+/* =========================================
+   EFEITO DE TRAJETÓRIA
+   ========================================= */
+
+#voaFlightPath,
+#voaFlightGlow {
+    vector-effect: non-scaling-stroke;
+}
+
+#voaFlightPath {
+    transition: none;
+}
+
+#voaFlightGlow {
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+#voaFlightDot {
+    transition:
+        cx 0.04s linear,
+        cy 0.04s linear;
+}
