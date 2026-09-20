@@ -462,10 +462,12 @@ function prepararCenarioInfinito() {
     */
 
     const elementosOriginais =
-        Array.from(
-            skyElement.children
-        );
-
+    Array.from(
+        skyElement.children
+    ).filter(elemento => {
+        return elemento.id !== "eagle" &&
+               !elemento.classList.contains("sun");
+    });
 
     /*
        Criar pista infinita.
@@ -733,7 +735,16 @@ function iniciarMovimentoCenario() {
 
     if (!skyElement) return;
 
+const solElement = skyElement.querySelector(".sun");
 
+if (solElement) {
+    solElement.style.setProperty(
+        "z-index",
+        "5",
+        "important"
+    );
+}
+   
     prepararCenarioInfinito();
 
 
