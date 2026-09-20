@@ -1636,76 +1636,34 @@ function animarVoo(timestamp) {
     verificarAutoCashout();
 
 
-    /* =====================================
-       MOVIMENTO HORIZONTAL
-    ====================================== */
+    /* =========================================
+   TRAJETÓRIA DA ÁGUIA
+   ========================================= */
 
-    const xBase =
-        VOO_INICIO_X +
-        (
-            (VOO_FIM_X -
-            VOO_INICIO_X) *
-            progresso
-        );
+const curva = Math.pow(progresso, 0.82);
 
+/* avanço horizontal */
+const xBase =
+    VOO_INICIO_X +
+    ((VOO_FIM_X - VOO_INICIO_X) * progresso);
 
-    /*
-       Pequena ondulação horizontal.
-    */
+/* movimento suave para a frente */
+const oscilacaoX =
+    Math.sin(tempoVoo * 1.6) * 0.8;
 
-    const oscilacaoX =
-        Math.sin(
-            tempoVoo * 1.7
-        ) * 1.2;
+const x = xBase + oscilacaoX;
 
 
-    const x =
-        xBase +
-        oscilacaoX;
+/* subida em curva */
+const yBase =
+    VOO_INICIO_Y -
+    ((VOO_INICIO_Y - VOO_FIM_Y) * curva);
 
+/* pequeno balanço natural */
+const oscilacaoY =
+    Math.sin(tempoVoo * 2.4) * 1.2;
 
-    /* =====================================
-       MOVIMENTO VERTICAL
-    ====================================== */
-
-    /*
-       A curva sobe progressivamente.
-    */
-
-    const curva =
-        Math.pow(
-            progresso,
-            0.78
-        );
-
-
-    const yBase =
-        VOO_INICIO_Y -
-        (
-            (
-                VOO_INICIO_Y -
-                VOO_FIM_Y
-            ) *
-            curva
-        );
-
-
-    /*
-       Movimento de voo.
-
-       A águia sobe e desce
-       suavemente enquanto avança.
-    */
-
-    const oscilacaoY =
-        Math.sin(
-            tempoVoo * 2.6
-        ) * 2.2;
-
-
-    const y =
-        yBase +
-        oscilacaoY;
+const y = yBase + oscilacaoY;
 
 ultimaPosicaoX = x;
 ultimaPosicaoY = y;
