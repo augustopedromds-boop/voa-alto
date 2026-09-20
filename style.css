@@ -1943,3 +1943,53 @@ body {
 #voaFlightGraph {
     pointer-events: none;
 }
+
+/* =========================================
+   GRÁFICO DE VOO — VOA ALTO
+   ========================================= */
+
+#voaFlightGraph {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 13;
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* brilho atrás da trajetória */
+#voaFlightGlow {
+    fill: none;
+    stroke: #f4bf31;
+    stroke-width: 2.2;
+    opacity: 0.18;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 8px #f4bf31);
+}
+
+/* linha principal */
+#voaFlightPath {
+    fill: none;
+    stroke: #f4bf31;
+    stroke-width: 0.8;
+    opacity: 0.95;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ponto na posição da águia */
+#voaFlightDot {
+    fill: #f4bf31;
+    opacity: 0.95;
+    filter:
+        drop-shadow(0 0 4px #f4bf31)
+        drop-shadow(0 0 9px #f4bf31);
+}
+
+/* retirar completamente a linha antiga */
+.flight-line {
+    display: none !important;
+    visibility: hidden !important;
+}
