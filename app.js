@@ -687,16 +687,16 @@ function diferenciarSegundoCenario(
 
 
     const trees =
-        cenario.querySelector(
-            ".park-trees"
-        );
+    cenario.querySelector(
+        ".park-trees"
+    );
 
-    if (trees) {
+if (trees) {
 
-        trees.style.transform =
-            "translateX(70px)";
+    trees.style.display =
+        "none";
 
-    }
+}
 
 
     const mountainsBack =
