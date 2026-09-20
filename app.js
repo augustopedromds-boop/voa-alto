@@ -95,7 +95,7 @@ const skyElement =
 ========================================= */
 
 const POSICAO_CHAO = 78;
-const POSICAO_ALTA = VOO_FIM_Y;
+
 
 /*
    Posição onde a águia entra
@@ -115,6 +115,20 @@ const VOO_INICIO_Y = 70;
 
 const VOO_FIM_X = 82;
 const VOO_FIM_Y = 20;
+
+
+/*
+   Compatibilidade com funções antigas.
+*/
+
+const POSICAO_ALTA = VOO_FIM_Y;
+
+
+/*
+   Última posição real da águia.
+   É usada para iniciar a queda
+   exatamente de onde ela terminou.
+*/
 
 let ultimaPosicaoX = VOO_INICIO_X;
 let ultimaPosicaoY = VOO_INICIO_Y;
