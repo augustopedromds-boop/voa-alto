@@ -390,7 +390,7 @@ function pararBatimentoAsas() {
 
 /* =========================================
    FUNDO INFINITO
-   DUAS CÓPIAS DO CENÁRIO
+   ÁGUIA FICA FORA DO CENÁRIO MÓVEL
 ========================================= */
 
 let cenarioAnimacao = null;
@@ -399,21 +399,51 @@ let cenarioPreparado = false;
 
 
 /* =========================================
-   CRIAR CENÁRIO DUPLO
+   PREPARAR CENÁRIO
 ========================================= */
 
 function prepararCenarioInfinito() {
 
-       /*
-       Garantir que a águia fica acima
-       e fora da camada que se move.
+    if (!skyElement) return;
+
+    if (cenarioPreparado) return;
+
+
+    /*
+       Procurar a área principal do jogo.
     */
 
-    if (eagleElement) {
+    const flightElement =
+        document.querySelector(".flight");
+
+
+    /*
+       IMPORTANTE:
+       tira a águia do SKY e coloca
+       diretamente no FLIGHT.
+
+       Assim o cenário pode andar
+       sem levar a águia consigo.
+    */
+
+    if (
+        eagleElement &&
+        flightElement
+    ) {
+
+        flightElement.appendChild(
+            eagleElement
+        );
 
         eagleElement.style.setProperty(
             "position",
             "absolute",
+            "important"
+        );
+
+        eagleElement.style.setProperty(
+            "left",
+            "50%",
             "important"
         );
 
@@ -424,38 +454,27 @@ function prepararCenarioInfinito() {
         );
 
     }
-   
-    if (!skyElement) return;
-
-    if (cenarioPreparado) return;
 
 
     /*
-       Guarda todos os elementos atuais
-       do cenário.
+       Pegar somente os elementos
+       que pertencem ao cenário.
     */
 
     const elementosOriginais =
-    Array.from(
-        skyElement.children
-    ).filter(elemento => {
-
-        /*
-           A águia NUNCA entra no cenário móvel.
-        */
-
-        return elemento.id !== "eagle";
-
-    });
+        Array.from(
+            skyElement.children
+        );
 
 
     /*
-       Cria a pista que vai transportar
-       os dois cenários.
+       Criar pista infinita.
     */
 
     cenarioTrack =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     cenarioTrack.className =
@@ -465,10 +484,10 @@ function prepararCenarioInfinito() {
     cenarioTrack.style.position =
         "absolute";
 
-    cenarioTrack.style.top =
+    cenarioTrack.style.left =
         "0";
 
-    cenarioTrack.style.left =
+    cenarioTrack.style.top =
         "0";
 
     cenarioTrack.style.width =
@@ -488,14 +507,17 @@ function prepararCenarioInfinito() {
 
 
     /*
-       PRIMEIRO CENÁRIO
+       CENÁRIO 1
     */
 
     const cenario1 =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     cenario1.className =
-        "voa-cenario-painel voa-cenario-1";
+        "voa-cenario-painel";
 
 
     cenario1.style.position =
@@ -515,14 +537,17 @@ function prepararCenarioInfinito() {
 
 
     /*
-       SEGUNDO CENÁRIO
+       CENÁRIO 2
     */
 
     const cenario2 =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     cenario2.className =
-        "voa-cenario-painel voa-cenario-2";
+        "voa-cenario-painel";
 
 
     cenario2.style.position =
@@ -542,7 +567,7 @@ function prepararCenarioInfinito() {
 
 
     /*
-       Coloca os elementos originais
+       Colocar os elementos originais
        no primeiro cenário.
     */
 
@@ -558,7 +583,7 @@ function prepararCenarioInfinito() {
 
 
     /*
-       Cria a segunda cópia.
+       Criar cópia do cenário.
     */
 
     elementosOriginais.forEach(
@@ -576,8 +601,7 @@ function prepararCenarioInfinito() {
 
 
     /*
-       Adiciona os dois cenários
-       à pista.
+       Adicionar os dois painéis.
     */
 
     cenarioTrack.appendChild(
@@ -590,7 +614,7 @@ function prepararCenarioInfinito() {
 
 
     /*
-       Coloca a pista dentro do SKY.
+       Colocar a pista dentro do SKY.
     */
 
     skyElement.appendChild(
@@ -607,18 +631,6 @@ function prepararCenarioInfinito() {
     );
 
 
-    /*
-       Garante que o cenário
-       fica atrás da águia.
-    */
-
-    skyElement.style.position =
-        "absolute";
-
-    skyElement.style.overflow =
-        "hidden";
-
-
     cenarioPreparado =
         true;
 
@@ -626,16 +638,12 @@ function prepararCenarioInfinito() {
 
 
 /* =========================================
-   DIFERENCIAR SEGUNDO CENÁRIO
+   DIFERENÇA DO SEGUNDO CENÁRIO
 ========================================= */
 
 function diferenciarSegundoCenario(
     cenario
 ) {
-
-    /*
-       NUVEM 1
-    */
 
     const cloud1 =
         cenario.querySelector(
@@ -650,10 +658,6 @@ function diferenciarSegundoCenario(
     }
 
 
-    /*
-       NUVEM 2
-    */
-
     const cloud2 =
         cenario.querySelector(
             ".cloud-2"
@@ -666,10 +670,6 @@ function diferenciarSegundoCenario(
 
     }
 
-
-    /*
-       NUVEM 3
-    */
 
     const cloud3 =
         cenario.querySelector(
@@ -684,9 +684,18 @@ function diferenciarSegundoCenario(
     }
 
 
-    /*
-       MONTANHAS DE FUNDO
-    */
+    const trees =
+        cenario.querySelector(
+            ".park-trees"
+        );
+
+    if (trees) {
+
+        trees.style.transform =
+            "translateX(70px)";
+
+    }
+
 
     const mountainsBack =
         cenario.querySelector(
@@ -701,10 +710,6 @@ function diferenciarSegundoCenario(
     }
 
 
-    /*
-       MONTANHAS DA FRENTE
-    */
-
     const mountainsFront =
         cenario.querySelector(
             ".mountains-front"
@@ -717,31 +722,11 @@ function diferenciarSegundoCenario(
 
     }
 
-
-    /*
-       ÁRVORES
-
-       Deslocamos ligeiramente
-       o conjunto das árvores.
-    */
-
-    const trees =
-        cenario.querySelector(
-            ".park-trees"
-        );
-
-    if (trees) {
-
-        trees.style.transform =
-            "translateX(70px)";
-
-    }
-
 }
 
 
 /* =========================================
-   INICIAR FUNDO INFINITO
+   INICIAR MOVIMENTO DO FUNDO
 ========================================= */
 
 function iniciarMovimentoCenario() {
@@ -749,23 +734,25 @@ function iniciarMovimentoCenario() {
     if (!skyElement) return;
 
 
-    /*
-       Cria os dois cenários
-       apenas uma vez.
-    */
-
     prepararCenarioInfinito();
 
 
     /*
-       Cancela animação anterior.
+       Parar animação anterior.
     */
 
-    pararMovimentoCenario();
+    if (cenarioAnimacao) {
+
+        cenarioAnimacao.cancel();
+
+        cenarioAnimacao =
+            null;
+
+    }
 
 
     /*
-       Reinicia a pista.
+       Garantir posição inicial.
     */
 
     cenarioTrack.style.transform =
@@ -773,15 +760,19 @@ function iniciarMovimentoCenario() {
 
 
     /*
-       A pista tem 200% da largura.
+       MOVIMENTO CONTÍNUO:
+       
+       0%
+       ↓
+       -50%
+       ↓
+       reinicia
+       ↓
+       -50%
+       ↓
+       reinicia...
 
-       Cada cenário ocupa 50% da pista.
-
-       Portanto, mover 50% da pista
-       faz exatamente um cenário
-       desaparecer pela esquerda.
-
-       O segundo já está atrás dele.
+       Sempre para a ESQUERDA.
     */
 
     cenarioAnimacao =
@@ -789,8 +780,9 @@ function iniciarMovimentoCenario() {
             [
                 {
                     transform:
-                        "translateX(0)"
+                        "translateX(0%)"
                 },
+
                 {
                     transform:
                         "translateX(-50%)"
@@ -798,18 +790,10 @@ function iniciarMovimentoCenario() {
             ],
             {
                 duration: 7000,
-
-                iterations:
-                    Infinity,
-
-                direction:
-                    "normal",
-
-                easing:
-                    "linear",
-
-                fill:
-                    "none"
+                iterations: Infinity,
+                direction: "normal",
+                easing: "linear",
+                fill: "none"
             }
         );
 
@@ -817,7 +801,7 @@ function iniciarMovimentoCenario() {
 
 
 /* =========================================
-   PARAR FUNDO
+   PARAR MOVIMENTO DO FUNDO
 ========================================= */
 
 function pararMovimentoCenario() {
@@ -835,7 +819,7 @@ function pararMovimentoCenario() {
     if (cenarioTrack) {
 
         cenarioTrack.style.transform =
-            "translateX(0)";
+            "translateX(0%)";
 
     }
 
