@@ -810,200 +810,70 @@ if (trees) {
 ========================================= */
 
 function iniciarMovimentoCenario() {
-
-    if (!skyElement) return;
-
     prepararCenarioInfinito();
 
-    if (!cenarioTrack) return;
+    const flight = document.querySelector(".flight");
+    const track = document.querySelector(".voa-cenario-track");
 
-    pararMovimentoCenario();
-
-    const paineis =
-        cenarioTrack.querySelectorAll(
-            ".voa-cenario-painel"
-        );
-
-    if (paineis.length < 2) return;
-
-    const painel1 = paineis[0];
-    const painel2 = paineis[1];
-
-    /*
-       Cada painel ocupa exatamente
-       uma tela.
-    */
-
-    const largura =
-        skyElement.clientWidth;
-
-    if (!largura) return;
-
-    cenarioTrack.style.width =
-        (largura * 2) + "px";
-
-    cenarioTrack.style.height =
-        "100%";
-
-    cenarioTrack.style.display =
-        "block";
-
-    cenarioTrack.style.position =
-        "absolute";
-
-    cenarioTrack.style.left =
-        "0";
-
-    cenarioTrack.style.top =
-        "0";
-
-    /*
-       POSIÇÃO INICIAL
-    */
-
-    let posicao1 = 0;
-
-    let posicao2 = largura;
-
-
-    painel1.style.position =
-        "absolute";
-
-    painel1.style.left =
-        "0";
-
-    painel1.style.top =
-        "0";
-
-    painel1.style.width =
-        largura + "px";
-
-    painel1.style.height =
-        "100%";
-
-    painel1.style.transform =
-        "translate3d(0,0,0)";
-
-
-    painel2.style.position =
-        "absolute";
-
-    painel2.style.left =
-        "0";
-
-    painel2.style.top =
-        "0";
-
-    painel2.style.width =
-        largura + "px";
-
-    painel2.style.height =
-        "100%";
-
-    painel2.style.transform =
-        `translate3d(${largura}px,0,0)`;
-
-
-    /*
-       VELOCIDADE
-       
-       Quanto maior o número,
-       mais rápido o cenário.
-    */
-
-    const velocidade =
-        largura / 8;
-
-
-    let ultimoTempo =
-        performance.now();
-
-
-    function moverCenario(tempoAtual) {
-
-        const delta =
-            (tempoAtual - ultimoTempo) / 1000;
-
-        ultimoTempo =
-            tempoAtual;
-
-
-        /*
-           Ambos os cenários
-           continuam sempre a andar.
-        */
-
-        posicao1 -=
-            velocidade * delta;
-
-        posicao2 -=
-            velocidade * delta;
-
-
-        /*
-           Quando o cenário 1 sai
-           completamente da tela,
-           colocamos ele atrás
-           do cenário 2.
-        */
-
-        if (
-            posicao1 <=
-            -largura
-        ) {
-
-            posicao1 =
-                posicao2 + largura;
-
-        }
-
-
-        /*
-           Quando o cenário 2 sai
-           completamente da tela,
-           colocamos ele atrás
-           do cenário 1.
-        */
-
-        if (
-            posicao2 <=
-            -largura
-        ) {
-
-            posicao2 =
-                posicao1 + largura;
-
-        }
-
-
-        /*
-           Aplicar posições.
-        */
-
-        painel1.style.transform =
-            `translate3d(${posicao1}px,0,0)`;
-
-        painel2.style.transform =
-            `translate3d(${posicao2}px,0,0)`;
-
-
-        cenarioAnimacao =
-            requestAnimationFrame(
-                moverCenario
-            );
-
+    if (!flight || !track) {
+        console.error("Cenário não encontrado.");
+        return;
     }
 
+    const paineis = track.querySelectorAll(".voa-cenario-painel");
 
-    ultimoTempo =
-        performance.now();
+    if (paineis.length < 2) {
+        console.error("Painéis do cenário não encontrados.");
+        return;
+    }
 
+    const largura = flight.clientWidth;
 
-    cenarioAnimacao =
-        requestAnimationFrame(
-            moverCenario
-        );
+    if (!largura) {
+        console.error("Largura do voo inválida.");
+        return;
+    }
 
+    track.style.width = (largura * 2) + "px";
+
+    paineis.forEach((painel, index) => {
+        painel.style.position = "absolute";
+        painel.style.top = "0";
+        painel.style.width = largura + "px";
+        painel.style.height = "100%";
+        painel.style.left = (index * largura) + "px";
+    });
+
+    let deslocamento = 0;
+    let ultimoTempo = performance.now();
+
+    if (cenarioAnimacao) {
+        cancelAnimationFrame(cenarioAnimacao);
+    }
+
+    function moverCenario(tempo) {
+        if (!vooAtivo || estadoVoo !== "voando") {
+            cenarioAnimacao = null;
+            return;
+        }
+
+        const delta = tempo - ultimoTempo;
+        ultimoTempo = tempo;
+
+        // velocidade do cenário
+        deslocamento += delta * 0.045;
+
+        if (deslocamento >= largura) {
+            deslocamento -= largura;
+        }
+
+        track.style.transform =
+            `translate3d(${-deslocamento}px, 0, 0)`;
+
+        cenarioAnimacao = requestAnimationFrame(moverCenario);
+    }
+
+    cenarioAnimacao = requestAnimationFrame(moverCenario);
 }
 
 
@@ -1012,20 +882,16 @@ function iniciarMovimentoCenario() {
 ========================================= */
 
 function pararMovimentoCenario() {
-
-    if (
-        cenarioAnimacao
-    ) {
-
-        cancelAnimationFrame(
-            cenarioAnimacao
-        );
-
-        cenarioAnimacao =
-            null;
-
+    if (cenarioAnimacao) {
+        cancelAnimationFrame(cenarioAnimacao);
+        cenarioAnimacao = null;
     }
 
+    const track = document.querySelector(".voa-cenario-track");
+
+    if (track) {
+        track.style.transform = "translate3d(0, 0, 0)";
+    }
 }
 
 
