@@ -1930,3 +1930,16 @@ body {
 .flight-line {
     display: none !important;
 }
+
+/* =========================================
+   RETIRAR LINHA ANTIGA ATRÁS DA ÁGUIA
+   ========================================= */
+
+.flight-line {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+#voaFlightGraph {
+    pointer-events: none;
+}
