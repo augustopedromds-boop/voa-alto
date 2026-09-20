@@ -1850,3 +1850,83 @@ body {
         steps(1)
         infinite !important;
 }
+
+/* =========================================
+   VOA ALTO — NOVO GRÁFICO DE VOO
+========================================= */
+
+#voaFlightGraph {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 13;
+
+    pointer-events: none;
+
+    overflow: visible;
+}
+
+
+/* Linha principal da trajetória */
+
+#voaFlightPath {
+    fill: none;
+
+    stroke: #f4bf31;
+
+    stroke-width: 4;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    filter:
+        drop-shadow(0 0 5px rgba(244,191,49,0.75))
+        drop-shadow(0 0 12px rgba(244,191,49,0.35));
+
+    opacity: 0.95;
+}
+
+
+/* Brilho suave atrás da linha */
+
+#voaFlightGlow {
+    fill: none;
+
+    stroke: rgba(244,191,49,0.22);
+
+    stroke-width: 12;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    filter: blur(4px);
+}
+
+
+/* Ponto que acompanha a águia */
+
+#voaFlightDot {
+    fill: #ffffff;
+
+    stroke: #f4bf31;
+
+    stroke-width: 3;
+
+    filter:
+        drop-shadow(0 0 7px rgba(244,191,49,0.9));
+
+    opacity: 1;
+}
+
+
+/* =========================================
+   LINHA ANTIGA — DESATIVADA
+========================================= */
+
+.flight-line {
+    display: none !important;
+}
