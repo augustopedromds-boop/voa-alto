@@ -1486,64 +1486,55 @@ function limparGraficoVoo() {
    ATUALIZAR GRÁFICO
 ========================================= */
 
-function atualizarGraficoVoo(
-    x,
-    y
-) {
+function atualizarGraficoVoo(x, y) {
 
-    if (!flightPath) return;
-
-
-    /*
-       Guardar ponto.
-    */
-
-    pontosVoo.push(
-        `${x},${y}`
-    );
-
-
-    /*
-       Limitar quantidade de pontos
-       para não ficar pesado.
-    */
-
-    if (pontosVoo.length > 180) {
-
-        pontosVoo.shift();
-
+    if (!flightPath || !flightGlow || !flightDot) {
+        return;
     }
 
+    pontosVoo.push({
+        x: x,
+        y: y
+    });
 
-    const pontos =
-        pontosVoo.join(" ");
+    /*
+       Mantém uma trajetória longa.
+    */
+    if (pontosVoo.length > 240) {
+        pontosVoo.shift();
+    }
 
+    /*
+       Converte os pontos para SVG.
+    */
+    const pontos = pontosVoo
+        .map(p => `${p.x},${p.y}`)
+        .join(" ");
 
     flightPath.setAttribute(
         "points",
         pontos
     );
 
-
     flightGlow.setAttribute(
         "points",
         pontos
     );
 
-
+    /*
+       O ponto dourado acompanha
+       exatamente a posição da águia.
+    */
     flightDot.setAttribute(
         "cx",
         x
     );
 
-
     flightDot.setAttribute(
         "cy",
         y
     );
-
 }
-
 
 /* =========================================
    ESCONDER GRÁFICO
