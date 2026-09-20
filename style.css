@@ -54,6 +54,9 @@ body {
 
     background: #111111;
     border-bottom: 1px solid #292929;
+
+    position: relative;
+    z-index: 100;
 }
 
 
@@ -147,14 +150,7 @@ body {
 
     overflow: hidden;
 
-    background:
-        radial-gradient(
-            circle at 50% 42%,
-            #302508 0%,
-            #161308 25%,
-            #090909 60%,
-            #050505 100%
-        );
+    background: #182817;
 }
 
 
@@ -170,7 +166,7 @@ body {
 
     transform: translateX(-50%);
 
-    z-index: 10;
+    z-index: 30;
 
     font-size: clamp(48px, 7vw, 88px);
 
@@ -194,18 +190,21 @@ body {
 
     width: 100%;
 
-    z-index: 10;
+    z-index: 30;
 
     text-align: center;
 
-    color: #999999;
+    color: #ffffff;
 
     font-size: 13px;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.8);
 }
 
 
 /* =========================================
-   CÉU
+   ÁREA DO PARQUE
 ========================================= */
 
 .sky {
@@ -214,6 +213,574 @@ body {
     inset: 0;
 
     overflow: hidden;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #75bde8 0%,
+            #a8d8f0 34%,
+            #c9e8f2 52%,
+            #78a95d 72%,
+            #3d6830 100%
+        );
+}
+
+
+/* =========================================
+   CÉU
+========================================= */
+
+.park-sky {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(71, 151, 206, 0.9),
+            rgba(191, 227, 241, 0.35) 55%,
+            rgba(255, 255, 255, 0) 72%
+        );
+
+    z-index: 0;
+}
+
+
+/* =========================================
+   SOL
+========================================= */
+
+.sun {
+    position: absolute;
+
+    width: 90px;
+    height: 90px;
+
+    right: 11%;
+    top: 9%;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #fffbd1 0%,
+            #ffe57b 45%,
+            rgba(255, 218, 92, 0.2) 72%,
+            transparent 100%
+        );
+
+    filter:
+        drop-shadow(
+            0 0 25px rgba(255, 221, 101, 0.65)
+        );
+
+    z-index: 1;
+}
+
+
+/* =========================================
+   NUVENS
+========================================= */
+
+.cloud {
+    position: absolute;
+
+    width: 130px;
+    height: 34px;
+
+    border-radius: 40px;
+
+    background: rgba(255, 255, 255, 0.72);
+
+    filter: blur(1px);
+
+    z-index: 2;
+
+    opacity: 0.75;
+}
+
+
+.cloud::before,
+.cloud::after {
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    background: inherit;
+}
+
+
+.cloud::before {
+    width: 52px;
+    height: 52px;
+
+    left: 20px;
+    bottom: 8px;
+}
+
+
+.cloud::after {
+    width: 65px;
+    height: 65px;
+
+    right: 18px;
+    bottom: 5px;
+}
+
+
+.cloud-1 {
+    top: 13%;
+    left: 12%;
+
+    transform: scale(0.8);
+}
+
+
+.cloud-2 {
+    top: 22%;
+    right: 25%;
+
+    transform: scale(0.58);
+    opacity: 0.5;
+}
+
+
+.cloud-3 {
+    top: 8%;
+    left: 45%;
+
+    transform: scale(0.45);
+    opacity: 0.42;
+}
+
+
+/* =========================================
+   MONTANHAS
+========================================= */
+
+.mountains {
+    position: absolute;
+
+    left: -5%;
+
+    width: 110%;
+
+    z-index: 3;
+
+    pointer-events: none;
+}
+
+
+.mountains-back {
+    bottom: 29%;
+
+    height: 30%;
+
+    opacity: 0.45;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 48%,
+            #668a6c 49%,
+            #668a6c 63%,
+            transparent 64%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 47%,
+            #789b78 48%,
+            #789b78 65%,
+            transparent 66%
+        );
+}
+
+
+.mountains-front {
+    bottom: 25%;
+
+    height: 25%;
+
+    opacity: 0.7;
+
+    background:
+        linear-gradient(
+            135deg,
+            transparent 45%,
+            #416441 46%,
+            #416441 64%,
+            transparent 65%
+        ),
+        linear-gradient(
+            45deg,
+            transparent 46%,
+            #52734d 47%,
+            #52734d 65%,
+            transparent 66%
+        );
+}
+
+
+/* =========================================
+   ÁRVORES DO PARQUE
+========================================= */
+
+.park-trees {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: 19%;
+
+    height: 43%;
+
+    z-index: 5;
+
+    pointer-events: none;
+}
+
+
+.tree {
+    position: absolute;
+
+    bottom: 0;
+
+    width: 95px;
+    height: 190px;
+}
+
+
+.tree-trunk {
+    position: absolute;
+
+    left: 50%;
+    bottom: 0;
+
+    width: 18px;
+    height: 95px;
+
+    transform: translateX(-50%);
+
+    border-radius: 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #51351f,
+            #754c2a,
+            #3e2818
+        );
+
+    box-shadow:
+        3px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+.tree-crown {
+    position: absolute;
+
+    left: 50%;
+    top: 5px;
+
+    width: 90px;
+    height: 105px;
+
+    transform: translateX(-50%);
+
+    border-radius:
+        50%
+        48%
+        45%
+        45%;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #6da34e 0%,
+            #4f873b 38%,
+            #31602e 72%,
+            #234722 100%
+        );
+
+    box-shadow:
+        inset -10px -15px 20px rgba(0, 0, 0, 0.18),
+        0 8px 14px rgba(0, 0, 0, 0.22);
+}
+
+
+.tree-1 {
+    left: 3%;
+
+    transform: scale(0.78);
+}
+
+
+.tree-2 {
+    left: 18%;
+
+    transform: scale(1.08);
+}
+
+
+.tree-3 {
+    left: 39%;
+
+    transform: scale(0.68);
+}
+
+
+.tree-4 {
+    right: 17%;
+
+    transform: scale(1.02);
+}
+
+
+.tree-5 {
+    right: 2%;
+
+    transform: scale(0.72);
+}
+
+
+/* =========================================
+   GRAMA
+========================================= */
+
+.grass {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: 11%;
+
+    height: 15%;
+
+    z-index: 7;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #5c8d3d 0%,
+            #3f6f2f 45%,
+            #2c5127 100%
+        );
+}
+
+
+.grass::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        repeating-linear-gradient(
+            80deg,
+            rgba(255,255,255,0.05) 0px,
+            rgba(255,255,255,0.05) 2px,
+            transparent 2px,
+            transparent 13px
+        );
+}
+
+
+.grass-blade {
+    position: absolute;
+
+    bottom: 8px;
+
+    width: 3px;
+    height: 18px;
+
+    border-radius: 100%;
+
+    background: #75a94c;
+
+    transform-origin: bottom;
+}
+
+
+.blade-1 {
+    left: 8%;
+    transform: rotate(-20deg);
+}
+
+.blade-2 {
+    left: 17%;
+    height: 24px;
+    transform: rotate(15deg);
+}
+
+.blade-3 {
+    left: 29%;
+    height: 15px;
+    transform: rotate(-25deg);
+}
+
+.blade-4 {
+    left: 42%;
+    height: 23px;
+    transform: rotate(20deg);
+}
+
+.blade-5 {
+    left: 54%;
+    height: 18px;
+    transform: rotate(-15deg);
+}
+
+.blade-6 {
+    left: 67%;
+    height: 25px;
+    transform: rotate(22deg);
+}
+
+.blade-7 {
+    left: 78%;
+    height: 16px;
+    transform: rotate(-18deg);
+}
+
+.blade-8 {
+    left: 88%;
+    height: 22px;
+    transform: rotate(17deg);
+}
+
+.blade-9 {
+    left: 94%;
+    height: 17px;
+    transform: rotate(-22deg);
+}
+
+.blade-10 {
+    left: 35%;
+    height: 20px;
+    transform: rotate(18deg);
+}
+
+
+/* =========================================
+   CHÃO
+========================================= */
+
+.ground {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    bottom: 0;
+
+    height: 17%;
+
+    z-index: 8;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #426d2d 0%,
+            #315525 35%,
+            #253f20 100%
+        );
+
+    box-shadow:
+        inset 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+
+.ground::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0.35;
+
+    background:
+        repeating-linear-gradient(
+            95deg,
+            transparent 0,
+            transparent 12px,
+            rgba(0, 0, 0, 0.08) 13px,
+            transparent 15px
+        );
+}
+
+
+.ground-line {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 0;
+
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(122, 166, 72, 0.8),
+            transparent
+        );
+}
+
+
+.ground-shadow {
+    position: absolute;
+
+    left: 50%;
+    top: -4px;
+
+    width: 230px;
+    height: 35px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.22);
+
+    filter: blur(8px);
+}
+
+
+/* =========================================
+   SOMBRA DA ÁGUIA
+========================================= */
+
+.eagle-ground-shadow {
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 16.5%;
+
+    width: 110px;
+    height: 24px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.42);
+
+    filter: blur(7px);
+
+    z-index: 9;
+
+    pointer-events: none;
 }
 
 
@@ -225,12 +792,12 @@ body {
     position: absolute;
 
     width: 150%;
-    height: 150%;
+    height: 110%;
 
     left: -25%;
-    top: 10%;
+    top: 23%;
 
-    opacity: 0.12;
+    opacity: 0.035;
 
     background-image:
         linear-gradient(
@@ -250,6 +817,41 @@ body {
         rotateX(58deg);
 
     transform-origin: center bottom;
+
+    z-index: 10;
+
+    pointer-events: none;
+}
+
+
+/* =========================================
+   PONTO INICIAL DA ÁGUIA
+========================================= */
+
+.eagle-start-point {
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 17.5%;
+
+    width: 10px;
+    height: 10px;
+
+    transform: translateX(-50%);
+
+    border-radius: 50%;
+
+    background: rgba(244, 191, 49, 0.35);
+
+    box-shadow:
+        0 0 18px rgba(244, 191, 49, 0.25);
+
+    z-index: 11;
+
+    opacity: 0;
+
+    pointer-events: none;
 }
 
 
@@ -266,7 +868,8 @@ body {
     left: 5%;
     bottom: 3%;
 
-    border-bottom: 3px solid rgba(244, 191, 49, 0.75);
+    border-bottom:
+        3px solid rgba(244, 191, 49, 0.65);
 
     border-radius:
         0
@@ -278,8 +881,12 @@ body {
 
     filter:
         drop-shadow(
-            0 0 10px rgba(244, 191, 49, 0.7)
+            0 0 10px rgba(244, 191, 49, 0.45)
         );
+
+    z-index: 12;
+
+    opacity: 0.35;
 }
 
 
@@ -287,43 +894,34 @@ body {
    ÁGUIA VOA ALTO
 ========================================= */
 
-/*
-   A imagem criada pelo Gemini possui:
-
-   4 colunas
-   2 linhas
-
-   Total:
-   8 frames
-*/
-
 .eagle {
     position: absolute;
 
     left: 50%;
-    top: 54%;
 
     /*
-       Tamanho de UMA célula do sprite.
+       A águia começa próxima do chão.
     */
+    top: 79%;
+
     width: 190px;
     height: 190px;
 
     transform:
         translate(-50%, -50%);
 
-    z-index: 8;
+    z-index: 20;
 
     pointer-events: none;
 
     /*
-       Movimento suave do corpo durante o voo.
+       IMPORTANTE:
+       A animação de movimento do corpo
+       será controlada pelo JavaScript
+       quando implementarmos o voo.
     */
-    animation:
-        eagle-flight-body
-        1.5s
-        ease-in-out
-        infinite;
+
+    animation: none;
 }
 
 
@@ -335,18 +933,29 @@ body {
     width: 100%;
     height: 100%;
 
-    background-image: url("ChatGPT Image 16_09_2026, 07_02_38.png");
+    background-image:
+        url("ChatGPT Image 16_09_2026, 07_02_38.png");
+
     background-repeat: no-repeat;
 
-    background-size: 400% 200%;
-    background-position: 0% 0%;
+    background-size:
+        400% 200%;
 
-    animation: eagle-wings 0.72s steps(1) infinite;
+    background-position:
+        0% 0%;
 
-    /* impede qualquer fundo do elemento */
+    animation:
+        eagle-wings
+        0.72s
+        steps(1)
+        infinite;
+
     background-color: transparent;
 
-    filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
+    filter:
+        drop-shadow(
+            0 10px 12px rgba(0, 0, 0, 0.55)
+        );
 }
 
 
@@ -356,85 +965,46 @@ body {
 
 @keyframes eagle-wings {
 
-    /*
-       FRAME 1
-       asas para cima
-    */
     0% {
         background-position:
             0% 0%;
     }
 
-
-    /*
-       FRAME 2
-    */
     12.5% {
         background-position:
             33.333% 0%;
     }
 
-
-    /*
-       FRAME 3
-    */
     25% {
         background-position:
             66.666% 0%;
     }
 
-
-    /*
-       FRAME 4
-       asas para baixo
-    */
     37.5% {
         background-position:
             100% 0%;
     }
 
-
-    /*
-       FRAME 5
-       começa a subir
-    */
     50% {
         background-position:
             0% 100%;
     }
 
-
-    /*
-       FRAME 6
-    */
     62.5% {
         background-position:
             33.333% 100%;
     }
 
-
-    /*
-       FRAME 7
-    */
     75% {
         background-position:
             66.666% 100%;
     }
 
-
-    /*
-       FRAME 8
-       asas novamente levantadas
-    */
     87.5% {
         background-position:
             100% 100%;
     }
 
-
-    /*
-       Volta ao primeiro frame.
-    */
     100% {
         background-position:
             0% 0%;
@@ -443,7 +1013,7 @@ body {
 
 
 /* =========================================
-   MOVIMENTO NATURAL DO CORPO
+   MOVIMENTO DO CORPO
 ========================================= */
 
 @keyframes eagle-flight-body {
@@ -499,6 +1069,8 @@ body {
         1.7s
         linear
         infinite;
+
+    z-index: 15;
 }
 
 
@@ -549,7 +1121,6 @@ body {
 
         opacity: 0;
     }
-
 }
 
 
@@ -573,6 +1144,10 @@ body {
     background: #0e0e0e;
 
     border-left: 1px solid #292929;
+
+    position: relative;
+
+    z-index: 50;
 }
 
 
@@ -738,6 +1313,13 @@ body {
 }
 
 
+.bet-button:disabled {
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
 /* =========================================
    ESTADO DA APOSTA
 ========================================= */
@@ -789,6 +1371,11 @@ body {
 }
 
 
+.cashout-button:disabled {
+    cursor: not-allowed;
+}
+
+
 /* =========================================
    HISTÓRICO
 ========================================= */
@@ -811,6 +1398,10 @@ body {
     background: #101010;
 
     border-top: 1px solid #292929;
+
+    position: relative;
+
+    z-index: 60;
 }
 
 
@@ -854,6 +1445,10 @@ body {
     background: #101010;
 
     border-top: 1px solid #292929;
+
+    position: relative;
+
+    z-index: 100;
 }
 
 
@@ -903,6 +1498,14 @@ body {
 
     .bottom-menu {
         gap: 30px;
+    }
+
+    .tree-2 {
+        left: 12%;
+    }
+
+    .tree-4 {
+        right: 10%;
     }
 
 }
@@ -977,23 +1580,71 @@ body {
 
 
     /* =========================
-       ÁGUIA NO CELULAR
+       PARQUE MOBILE
+    ========================== */
+
+    .sun {
+        width: 65px;
+        height: 65px;
+
+        right: 8%;
+        top: 7%;
+    }
+
+
+    .tree {
+        transform: scale(0.65) !important;
+    }
+
+
+    .mountains-back {
+        bottom: 27%;
+    }
+
+
+    .mountains-front {
+        bottom: 23%;
+    }
+
+
+    .grass {
+        bottom: 11%;
+    }
+
+
+    .ground {
+        height: 18%;
+    }
+
+
+    /* =========================
+       ÁGUIA
     ========================== */
 
     .eagle {
         width: 170px;
         height: 170px;
 
+        left: 50%;
+        top: 78%;
+
         transform:
-            translate(-50%, -50%)
-            scale(0.78);
+            translate(-50%, -50%);
+    }
+
+
+    .eagle-ground-shadow {
+        bottom: 17.5%;
+
+        width: 90px;
+        height: 19px;
     }
 
 
     .bet-panel {
         position: absolute;
 
-        z-index: 20;
+        z-index: 70;
 
         left: 0;
         bottom: 0;
@@ -1046,7 +1697,7 @@ body {
     .history {
         position: absolute;
 
-        z-index: 30;
+        z-index: 80;
 
         top: 56px;
 
@@ -1102,6 +1753,8 @@ body {
     .eagle {
         width: 150px;
         height: 150px;
+
+        top: 77%;
     }
 
 
@@ -1119,6 +1772,11 @@ body {
 
     .bet-button {
         padding: 11px;
+    }
+
+
+    .tree {
+        transform: scale(0.5) !important;
     }
 
 }
