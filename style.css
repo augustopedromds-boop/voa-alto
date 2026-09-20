@@ -335,48 +335,18 @@ body {
     width: 100%;
     height: 100%;
 
-    /*
-       IMAGEM DO GEMINI
-    */
-    background-image:
-        url("ChatGPT Image 16_09_2026, 07_02_38.png");
-
+    background-image: url("ChatGPT Image 16_09_2026, 07_02_38.png");
     background-repeat: no-repeat;
 
-    /*
-       A imagem inteira contém:
+    background-size: 400% 200%;
+    background-position: 0% 0%;
 
-       4 colunas
-       2 linhas
-    */
-    background-size:
-        400% 200%;
+    animation: eagle-wings 0.72s steps(1) infinite;
 
-    /*
-       Começa no primeiro frame.
-    */
-    background-position:
-        0% 0%;
+    /* impede qualquer fundo do elemento */
+    background-color: transparent;
 
-    /*
-       8 frames.
-       steps(1) evita movimento
-       contínuo entre as poses.
-    */
-    animation:
-        eagle-wings
-        0.72s
-        steps(1)
-        infinite;
-
-    /*
-       Sombra da águia.
-    */
-    filter:
-        drop-shadow(
-            0 10px 12px
-            rgba(0, 0, 0, 0.55)
-        );
+    filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
 }
 
 
