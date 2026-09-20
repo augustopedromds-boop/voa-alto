@@ -404,6 +404,27 @@ let cenarioPreparado = false;
 
 function prepararCenarioInfinito() {
 
+       /*
+       Garantir que a águia fica acima
+       e fora da camada que se move.
+    */
+
+    if (eagleElement) {
+
+        eagleElement.style.setProperty(
+            "position",
+            "absolute",
+            "important"
+        );
+
+        eagleElement.style.setProperty(
+            "z-index",
+            "1000",
+            "important"
+        );
+
+    }
+   
     if (!skyElement) return;
 
     if (cenarioPreparado) return;
