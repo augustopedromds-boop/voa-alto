@@ -1837,3 +1837,16 @@ body {
             0 10px 12px rgba(0,0,0,0.6)
         );
 }
+
+/* =========================================
+   FUNÇÃO EXTRA — BATER AS ASAS
+   APENAS QUANDO A CLASSE ESTIVER ATIVA
+========================================= */
+
+.eagle-sprite.batendo-asas {
+    animation:
+        eagle-wings
+        0.72s
+        steps(1)
+        infinite !important;
+}
