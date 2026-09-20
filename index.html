@@ -11,619 +11,547 @@
 
 <body>
 
-    <!-- =========================================================
-         VOA ALTO
-         ========================================================= -->
+<div class="app">
 
-    <div class="game">
+    <!-- =========================
+         TOPO
+    ========================== -->
 
-        <!-- ================= TOP BAR ================= -->
+    <header class="topbar">
 
-        <header class="topbar">
+        <div class="logo">
+            🦅 VOA ALTO
+        </div>
 
-            <div class="logo">
-                🦅 <span>VOA ALTO</span>
+        <div class="top-actions">
+
+            <div class="saldo">
+                Saldo:
+                <strong id="saldo">10.000 Kz</strong>
             </div>
 
-            <div class="top-actions">
+            <button
+                class="icon-btn"
+                aria-label="Definições"
+                type="button"
+            >
+                ⚙️
+            </button>
 
-                <div class="balance">
-                    <span class="balance-label">SALDO</span>
-                    <strong id="balance">10.000 Kz</strong>
+            <button
+                class="icon-btn"
+                aria-label="Perfil"
+                type="button"
+            >
+                👤
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         ÁREA PRINCIPAL
+    ========================== -->
+
+    <main class="game-area">
+
+        <!-- =========================
+             ÁREA DO VOO
+        ========================== -->
+
+        <section class="flight">
+
+            <!-- =====================
+                 MULTIPLICADOR
+            ====================== -->
+
+            <div
+                class="multiplier"
+                id="multiplier"
+            >
+                1.00x
+            </div>
+
+
+            <!-- =====================
+                 ESTADO DO VOO
+            ====================== -->
+
+            <div
+                class="flight-status"
+                id="flightStatus"
+            >
+                A águia está no chão...
+            </div>
+
+
+            <!-- =========================
+                 PARQUE / CAMPO DE VOO
+            ========================== -->
+
+            <div
+                class="sky"
+                id="sky"
+            >
+
+                <!-- =====================
+                     CÉU
+                ====================== -->
+
+                <div class="park-sky"></div>
+
+
+                <!-- =====================
+                     SOL
+                ====================== -->
+
+                <div class="sun"></div>
+
+
+                <!-- =====================
+                     NUVENS
+                ====================== -->
+
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+
+
+                <!-- =====================
+                     MONTANHAS DISTANTES
+                ====================== -->
+
+                <div class="mountains mountains-back"></div>
+
+                <div class="mountains mountains-front"></div>
+
+
+                <!-- =====================
+                     PARQUE / ÁRVORES
+                ====================== -->
+
+                <div class="park-trees">
+
+                    <div class="tree tree-1">
+
+                        <div class="tree-trunk"></div>
+
+                        <div class="tree-crown"></div>
+
+                    </div>
+
+
+                    <div class="tree tree-2">
+
+                        <div class="tree-trunk"></div>
+
+                        <div class="tree-crown"></div>
+
+                    </div>
+
+
+                    <div class="tree tree-3">
+
+                        <div class="tree-trunk"></div>
+
+                        <div class="tree-crown"></div>
+
+                    </div>
+
+
+                    <div class="tree tree-4">
+
+                        <div class="tree-trunk"></div>
+
+                        <div class="tree-crown"></div>
+
+                    </div>
+
+
+                    <div class="tree tree-5">
+
+                        <div class="tree-trunk"></div>
+
+                        <div class="tree-crown"></div>
+
+                    </div>
+
                 </div>
 
-                <button class="icon-btn" id="settingsBtn" aria-label="Definições">
-                    ⚙
+
+                <!-- =====================
+                     GRAMA
+                ====================== -->
+
+                <div class="grass">
+
+                    <span class="grass-blade blade-1"></span>
+                    <span class="grass-blade blade-2"></span>
+                    <span class="grass-blade blade-3"></span>
+                    <span class="grass-blade blade-4"></span>
+                    <span class="grass-blade blade-5"></span>
+                    <span class="grass-blade blade-6"></span>
+                    <span class="grass-blade blade-7"></span>
+                    <span class="grass-blade blade-8"></span>
+                    <span class="grass-blade blade-9"></span>
+                    <span class="grass-blade blade-10"></span>
+
+                </div>
+
+
+                <!-- =====================
+                     CHÃO
+                ====================== -->
+
+                <div
+                    class="ground"
+                    id="ground"
+                >
+
+                    <div class="ground-shadow"></div>
+
+                    <div class="ground-line"></div>
+
+                </div>
+
+
+                <!-- =====================
+                     GRELHA ORIGINAL
+                     Mantida para o jogo
+                ====================== -->
+
+                <div class="sky-grid"></div>
+
+
+                <!-- =====================
+                     LINHA DA TRAJETÓRIA
+                ====================== -->
+
+                <div
+                    class="flight-line"
+                    id="flightLine"
+                ></div>
+
+
+                <!-- =====================
+                     PARTÍCULAS
+                ====================== -->
+
+                <div class="particle particle-1"></div>
+                <div class="particle particle-2"></div>
+                <div class="particle particle-3"></div>
+                <div class="particle particle-4"></div>
+
+
+                <!-- =========================
+                     PONTO ONDE A ÁGUIA COMEÇA
+                ========================== -->
+
+                <div
+                    class="eagle-start-point"
+                    id="eagleStartPoint"
+                ></div>
+
+
+                <!-- =========================
+                     ÁGUIA VOA ALTO
+                     SPRITE SHEET 4x2
+                ========================== -->
+
+                <div
+                    class="eagle"
+                    id="eagle"
+                    aria-label="Águia VOA ALTO"
+                >
+
+                    <div class="eagle-sprite"></div>
+
+                </div>
+
+
+                <!-- =====================
+                     SOMBRA DA ÁGUIA
+                ====================== -->
+
+                <div
+                    class="eagle-ground-shadow"
+                    id="eagleGroundShadow"
+                ></div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PAINEL DE APOSTA
+        ========================== -->
+
+        <aside class="bet-panel">
+
+
+            <!-- =====================
+                 ABAS
+            ====================== -->
+
+            <div class="tabs">
+
+                <button
+                    class="tab active"
+                    id="betTab"
+                    type="button"
+                >
+                    APOSTAR
                 </button>
 
-                <button class="icon-btn" id="profileBtn" aria-label="Perfil">
-                    👤
+
+                <button
+                    class="tab"
+                    id="historyTab"
+                    type="button"
+                >
+                    HISTÓRICO
                 </button>
 
             </div>
 
-        </header>
 
+            <!-- =====================
+                 VALOR DA APOSTA
+            ====================== -->
 
-        <!-- ================= ÁREA PRINCIPAL ================= -->
+            <div class="bet-card">
 
-        <main class="main-layout">
-
-            <!-- ================= VOO ================= -->
-
-            <section class="flight">
-
-                <!-- Multiplicador -->
-
-                <div class="multiplier" id="multiplier">
-                    1.00x
-                </div>
-
-                <!-- Estado do voo -->
-
-                <div class="flight-status" id="flightStatus">
-                    A águia está no chão...
+                <div class="bet-title">
+                    VALOR DA APOSTA
                 </div>
 
 
-                <!-- ================= PARQUE ================= -->
-
-                <div class="sky" id="sky">
-
-                    <!-- Céu -->
-
-                    <div class="park-sky"></div>
-
-
-                    <!-- Sol -->
-
-                    <div class="sun"></div>
-
-
-                    <!-- Nuvens -->
-
-                    <div class="cloud cloud-1"></div>
-                    <div class="cloud cloud-2"></div>
-                    <div class="cloud cloud-3"></div>
-
-
-                    <!-- Montanhas ao fundo -->
-
-                    <div class="mountains mountains-back"></div>
-                    <div class="mountains mountains-front"></div>
-
-
-                    <!-- Árvores -->
-
-                    <div class="trees">
-
-                        <div class="tree tree-1">
-                            <div class="tree-trunk"></div>
-                            <div class="tree-crown"></div>
-                        </div>
-
-                        <div class="tree tree-2">
-                            <div class="tree-trunk"></div>
-                            <div class="tree-crown"></div>
-                        </div>
-
-                        <div class="tree tree-3">
-                            <div class="tree-trunk"></div>
-                            <div class="tree-crown"></div>
-                        </div>
-
-                        <div class="tree tree-4">
-                            <div class="tree-trunk"></div>
-                            <div class="tree-crown"></div>
-                        </div>
-
-                        <div class="tree tree-5">
-                            <div class="tree-trunk"></div>
-                            <div class="tree-crown"></div>
-                        </div>
-
-                    </div>
-
-
-                    <!-- Grama -->
-
-                    <div class="grass">
-
-                        <div class="grass-blade blade-1"></div>
-                        <div class="grass-blade blade-2"></div>
-                        <div class="grass-blade blade-3"></div>
-                        <div class="grass-blade blade-4"></div>
-                        <div class="grass-blade blade-5"></div>
-                        <div class="grass-blade blade-6"></div>
-                        <div class="grass-blade blade-7"></div>
-                        <div class="grass-blade blade-8"></div>
-
-                    </div>
-
-
-                    <!-- Chão -->
-
-                    <div class="ground" id="ground">
-
-                        <div class="ground-shadow"></div>
-
-                        <div class="ground-line"></div>
-
-                    </div>
-
-
-                    <!-- Linha de voo -->
-
-                    <div
-                        class="flight-line"
-                        id="flightLine">
-                    </div>
-
-
-                    <!-- Partículas -->
-
-                    <div class="particle particle-1"></div>
-                    <div class="particle particle-2"></div>
-                    <div class="particle particle-3"></div>
-                    <div class="particle particle-4"></div>
-
-
-                    <!-- ================= ÁGUIA ================= -->
-
-                    <div
-                        class="eagle"
-                        id="eagle"
-                        aria-label="Águia VOA ALTO"
-                    >
-
-                        <div class="eagle-sprite"></div>
-
-                    </div>
-
-
-                    <!-- Indicador de posição inicial -->
-
-                    <div
-                        class="eagle-start-point"
-                        id="eagleStartPoint">
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- ================= PAINEL DE APOSTA ================= -->
-
-            <aside class="bet-panel">
-
-                <div class="bet-card">
-
-                    <div class="bet-title">
-                        <span>VOA ALTO</span>
-                        <small>CRÉDITOS DE TESTE</small>
-                    </div>
-
-
-                    <!-- Valor -->
-
-                    <div class="bet-section">
-
-                        <label for="betAmount">
-                            Valor da aposta
-                        </label>
-
-                        <div class="bet-input">
-
-                            <input
-                                id="betAmount"
-                                type="number"
-                                value="500"
-                                min="10"
-                                step="10"
-                            >
-
-                            <span>Kz</span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- Valores rápidos -->
-
-                    <div class="quick-values">
-
-                        <button data-value="100">
-                            100
-                        </button>
-
-                        <button data-value="500">
-                            500
-                        </button>
-
-                        <button data-value="1000">
-                            1K
-                        </button>
-
-                        <button data-value="5000">
-                            5K
-                        </button>
-
-                    </div>
-
-
-                    <!-- Botão principal -->
+                <div class="amount-box">
 
                     <button
-                        class="bet-button"
-                        id="betButton"
+                        type="button"
+                        id="minus"
                     >
-                        APOSTAR
+                        −
                     </button>
 
 
-                    <!-- Cash out -->
+                    <input
+                        type="number"
+                        id="betAmount"
+                        value="500"
+                        min="100"
+                        step="100"
+                    >
+
 
                     <button
-                        class="cashout-button"
-                        id="cashoutButton"
-                        disabled
+                        type="button"
+                        id="plus"
                     >
-                        RETIRAR
+                        +
                     </button>
 
-
-                    <!-- Estado -->
-
-                    <div
-                        class="bet-message"
-                        id="betMessage"
-                    >
-                        Aguarda o próximo voo.
-                    </div>
-
                 </div>
 
 
-                <!-- ================= HISTÓRICO ================= -->
+                <!-- =================
+                     BOTÃO APOSTAR
+                ================== -->
 
-                <div class="history-card">
+                <button
+                    class="bet-button"
+                    id="betButton"
+                    type="button"
+                >
+                    APOSTAR
+                </button>
 
-                    <div class="history-header">
+            </div>
 
-                        <span>HISTÓRICO</span>
 
-                    </div>
+            <!-- =====================
+                 RETIRADA AUTOMÁTICA
+            ====================== -->
 
-                    <div
-                        class="history"
-                        id="history"
+            <div class="bet-card">
+
+                <div class="bet-title">
+                    RETIRADA AUTOMÁTICA
+                </div>
+
+
+                <div class="amount-box">
+
+                    <input
+                        type="number"
+                        id="autoCashout"
+                        value="2.00"
+                        step="0.10"
+                        min="1.01"
                     >
 
-                        <div class="history-empty">
-                            Ainda não existem voos.
-                        </div>
 
-                    </div>
+                    <span class="x">
+                        x
+                    </span>
 
                 </div>
 
-            </aside>
-
-        </main>
+            </div>
 
 
-        <!-- ================= MENU INFERIOR ================= -->
+            <!-- =====================
+                 ESTADO DA APOSTA
+            ====================== -->
 
-        <nav class="bottom-menu">
+            <div
+                class="bet-status"
+                id="betStatus"
+            >
+                Nenhuma aposta nesta rodada.
+            </div>
 
-            <button class="bottom-item active">
 
-                <span>🦅</span>
+            <!-- =====================
+                 RETIRAR
+            ====================== -->
 
-                <small>
-                    Voar
-                </small>
-
+            <button
+                class="cashout-button"
+                id="cashoutButton"
+                type="button"
+                disabled
+            >
+                RETIRAR
             </button>
 
+        </aside>
 
-            <button class="bottom-item">
+    </main>
 
-                <span>🏆</span>
 
-                <small>
-                    Ranking
-                </small>
+    <!-- =========================
+         HISTÓRICO DAS RODADAS
+    ========================== -->
 
-            </button>
+    <section
+        class="history"
+        id="history"
+    >
 
+        <span>1.08x</span>
 
-            <button class="bottom-item">
+        <span class="gold">
+            2.42x
+        </span>
 
-                <span>📊</span>
+        <span>
+            1.13x
+        </span>
 
-                <small>
-                    Histórico
-                </small>
+        <span class="gold">
+            5.76x
+        </span>
 
-            </button>
+        <span>
+            1.01x
+        </span>
 
+        <span>
+            3.20x
+        </span>
 
-            <button class="bottom-item">
+        <span>
+            1.44x
+        </span>
 
-                <span>👤</span>
+    </section>
 
-                <small>
-                    Perfil
-                </small>
 
-            </button>
+    <!-- =========================
+         MENU INFERIOR
+    ========================== -->
 
-        </nav>
+    <footer class="bottom-menu">
 
-    </div>
 
+        <button
+            class="menu-item active"
+            type="button"
+        >
 
-    <!-- =========================================================
-         JAVASCRIPT
-         ========================================================= -->
+            <span class="menu-icon">
+                🏠
+            </span>
 
-    <script>
+            <small>
+                JOGAR
+            </small>
 
-        /* =====================================================
-           ESTADO INICIAL
-           ===================================================== */
+        </button>
 
-        let saldo = 10000;
 
-        let multiplicador = 1.00;
+        <button
+            class="menu-item"
+            type="button"
+        >
 
-        let vooAtivo = false;
+            <span class="menu-icon">
+                💰
+            </span>
 
-        let apostaFeita = false;
+            <small>
+                SALDO
+            </small>
 
-        let apostaRetirada = false;
+        </button>
 
-        let valorAposta = 500;
 
+        <button
+            class="menu-item"
+            type="button"
+        >
 
-        /* =====================================================
-           ELEMENTOS
-           ===================================================== */
+            <span class="menu-icon">
+                📊
+            </span>
 
-        const balanceElement =
-            document.getElementById("balance");
+            <small>
+                HISTÓRICO
+            </small>
 
-        const multiplierElement =
-            document.getElementById("multiplier");
+        </button>
 
-        const flightStatusElement =
-            document.getElementById("flightStatus");
 
-        const eagleElement =
-            document.getElementById("eagle");
+        <button
+            class="menu-item"
+            type="button"
+        >
 
-        const betAmountElement =
-            document.getElementById("betAmount");
+            <span class="menu-icon">
+                👤
+            </span>
 
-        const betButton =
-            document.getElementById("betButton");
+            <small>
+                PERFIL
+            </small>
 
-        const cashoutButton =
-            document.getElementById("cashoutButton");
+        </button>
 
-        const betMessage =
-            document.getElementById("betMessage");
+    </footer>
 
+</div>
 
-        /* =====================================================
-           FORMATAÇÃO DO SALDO
-           ===================================================== */
 
-        function atualizarSaldo() {
+<!-- =========================
+     JAVASCRIPT
+========================== -->
 
-            balanceElement.textContent =
-                saldo.toLocaleString("pt-AO") + " Kz";
-
-        }
-
-
-        /* =====================================================
-           POSIÇÃO INICIAL DA ÁGUIA
-           ===================================================== */
-
-        function colocarAguiaNoChao() {
-
-            eagleElement.style.left = "50%";
-
-            eagleElement.style.top = "78%";
-
-            eagleElement.style.transform =
-                "translate(-50%, -50%) rotate(0deg)";
-
-        }
-
-
-        /* =====================================================
-           ESTADO INICIAL
-           ===================================================== */
-
-        function prepararVoo() {
-
-            vooAtivo = false;
-
-            apostaFeita = false;
-
-            apostaRetirada = false;
-
-            multiplicador = 1.00;
-
-            multiplierElement.textContent =
-                "1.00x";
-
-            flightStatusElement.textContent =
-                "A águia está no chão...";
-
-            betMessage.textContent =
-                "Aguarda o próximo voo.";
-
-            cashoutButton.disabled = true;
-
-            betButton.disabled = false;
-
-            colocarAguiaNoChao();
-
-        }
-
-
-        /* =====================================================
-           VALORES RÁPIDOS
-           ===================================================== */
-
-        document
-            .querySelectorAll(".quick-values button")
-            .forEach(button => {
-
-                button.addEventListener("click", () => {
-
-                    const value =
-                        Number(button.dataset.value);
-
-                    betAmountElement.value =
-                        value;
-
-                });
-
-            });
-
-
-        /* =====================================================
-           APOSTA
-           ===================================================== */
-
-        betButton.addEventListener("click", () => {
-
-            const valor =
-                Number(betAmountElement.value);
-
-            if (!valor || valor <= 0) {
-
-                betMessage.textContent =
-                    "Introduz um valor válido.";
-
-                return;
-
-            }
-
-            if (valor > saldo) {
-
-                betMessage.textContent =
-                    "Saldo insuficiente.";
-
-                return;
-
-            }
-
-
-            valorAposta = valor;
-
-            saldo -= valorAposta;
-
-            atualizarSaldo();
-
-
-            apostaFeita = true;
-
-            betButton.disabled = true;
-
-            cashoutButton.disabled = false;
-
-            betMessage.textContent =
-                "Aposta preparada para o próximo voo.";
-
-        });
-
-
-        /* =====================================================
-           RETIRAR
-           ===================================================== */
-
-        cashoutButton.addEventListener("click", () => {
-
-            if (!vooAtivo) {
-
-                return;
-
-            }
-
-            if (!apostaFeita || apostaRetirada) {
-
-                return;
-
-            }
-
-
-            apostaRetirada = true;
-
-
-            const ganho =
-                valorAposta * multiplicador;
-
-
-            saldo += ganho;
-
-            atualizarSaldo();
-
-
-            cashoutButton.disabled = true;
-
-
-            betMessage.textContent =
-                "Retiraste " +
-                ganho.toFixed(0) +
-                " Kz em " +
-                multiplicador.toFixed(2) +
-                "x.";
-
-        });
-
-
-        /* =====================================================
-           BOTÕES DO MENU
-           ===================================================== */
-
-        document
-            .querySelectorAll(".bottom-item")
-            .forEach(button => {
-
-                button.addEventListener("click", () => {
-
-                    document
-                        .querySelectorAll(".bottom-item")
-                        .forEach(item => {
-
-                            item.classList.remove("active");
-
-                        });
-
-                    button.classList.add("active");
-
-                });
-
-            });
-
-
-        /* =====================================================
-           INICIALIZAÇÃO
-           ===================================================== */
-
-        atualizarSaldo();
-
-        prepararVoo();
-
-    </script>
+<script src="app.js"></script>
 
 </body>
 </html>
