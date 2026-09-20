@@ -816,24 +816,20 @@ if (solElement) {
 ========================================= */
 
 function pararMovimentoCenario() {
+    if (!cenarioAnimacao || !cenarioTrack) return;
 
-    if (cenarioAnimacao) {
+    const estadoAtual = cenarioAnimacao.effect.getComputedTiming();
 
-        cenarioAnimacao.cancel();
+    const transformAtual =
+        getComputedStyle(cenarioTrack).transform;
 
-        cenarioAnimacao =
-            null;
+    cenarioAnimacao.cancel();
+    cenarioAnimacao = null;
 
+    // Mantém exatamente a posição onde o cenário parou
+    if (transformAtual && transformAtual !== "none") {
+        cenarioTrack.style.transform = transformAtual;
     }
-
-
-    if (cenarioTrack) {
-
-        cenarioTrack.style.transform =
-            "translateX(0%)";
-
-    }
-
 }
 
 
