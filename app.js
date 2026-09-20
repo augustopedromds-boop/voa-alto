@@ -728,10 +728,11 @@ function diferenciarSegundoCenario(
 
 
 /* =========================================
-   INICIAR MOVIMENTO DO FUNDO
+   MOVIMENTO INFINITO DO CENÁRIO
 ========================================= */
 
 function iniciarMovimentoCenario() {
+
     if (!skyElement) return;
 
     prepararCenarioInfinito();
@@ -740,61 +741,215 @@ function iniciarMovimentoCenario() {
 
     pararMovimentoCenario();
 
-    const largura = skyElement.clientWidth;
+    const paineis =
+        cenarioTrack.querySelectorAll(
+            ".voa-cenario-painel"
+        );
+
+    if (paineis.length < 2) return;
+
+    const painel1 = paineis[0];
+    const painel2 = paineis[1];
+
+    /*
+       Cada painel ocupa exatamente
+       uma tela.
+    */
+
+    const largura =
+        skyElement.clientWidth;
 
     if (!largura) return;
 
-    const duracao = 10000;
+    cenarioTrack.style.width =
+        (largura * 2) + "px";
 
-    // Cada painel ocupa exatamente uma tela
-    cenarioTrack.style.width = "200%";
-    cenarioTrack.style.display = "flex";
-    cenarioTrack.style.transform = "translateX(0)";
+    cenarioTrack.style.height =
+        "100%";
 
-    const paineis =
-        cenarioTrack.querySelectorAll(".voa-cenario-painel");
+    cenarioTrack.style.display =
+        "block";
 
-    paineis.forEach(painel => {
-        painel.style.width = "50%";
-        painel.style.flex = "0 0 50%";
-    });
+    cenarioTrack.style.position =
+        "absolute";
 
-    let inicio = performance.now();
+    cenarioTrack.style.left =
+        "0";
 
-    function animar(agora) {
+    cenarioTrack.style.top =
+        "0";
 
-        if (!cenarioTrack) return;
+    /*
+       POSIÇÃO INICIAL
+    */
 
-        const progresso =
-            ((agora - inicio) % duracao) / duracao;
+    let posicao1 = 0;
+
+    let posicao2 = largura;
+
+
+    painel1.style.position =
+        "absolute";
+
+    painel1.style.left =
+        "0";
+
+    painel1.style.top =
+        "0";
+
+    painel1.style.width =
+        largura + "px";
+
+    painel1.style.height =
+        "100%";
+
+    painel1.style.transform =
+        "translate3d(0,0,0)";
+
+
+    painel2.style.position =
+        "absolute";
+
+    painel2.style.left =
+        "0";
+
+    painel2.style.top =
+        "0";
+
+    painel2.style.width =
+        largura + "px";
+
+    painel2.style.height =
+        "100%";
+
+    painel2.style.transform =
+        `translate3d(${largura}px,0,0)`;
+
+
+    /*
+       VELOCIDADE
+       
+       Quanto maior o número,
+       mais rápido o cenário.
+    */
+
+    const velocidade =
+        largura / 8;
+
+
+    let ultimoTempo =
+        performance.now();
+
+
+    function moverCenario(tempoAtual) {
+
+        const delta =
+            (tempoAtual - ultimoTempo) / 1000;
+
+        ultimoTempo =
+            tempoAtual;
+
 
         /*
-          O track tem 200%.
-          -50% = exatamente uma tela inteira.
+           Ambos os cenários
+           continuam sempre a andar.
         */
-        const deslocamento = progresso * 50;
 
-        cenarioTrack.style.transform =
-            `translate3d(-${deslocamento}%, 0, 0)`;
+        posicao1 -=
+            velocidade * delta;
+
+        posicao2 -=
+            velocidade * delta;
+
+
+        /*
+           Quando o cenário 1 sai
+           completamente da tela,
+           colocamos ele atrás
+           do cenário 2.
+        */
+
+        if (
+            posicao1 <=
+            -largura
+        ) {
+
+            posicao1 =
+                posicao2 + largura;
+
+        }
+
+
+        /*
+           Quando o cenário 2 sai
+           completamente da tela,
+           colocamos ele atrás
+           do cenário 1.
+        */
+
+        if (
+            posicao2 <=
+            -largura
+        ) {
+
+            posicao2 =
+                posicao1 + largura;
+
+        }
+
+
+        /*
+           Aplicar posições.
+        */
+
+        painel1.style.transform =
+            `translate3d(${posicao1}px,0,0)`;
+
+        painel2.style.transform =
+            `translate3d(${posicao2}px,0,0)`;
+
 
         cenarioAnimacao =
-            requestAnimationFrame(animar);
+            requestAnimationFrame(
+                moverCenario
+            );
+
     }
 
+
+    ultimoTempo =
+        performance.now();
+
+
     cenarioAnimacao =
-        requestAnimationFrame(animar);
+        requestAnimationFrame(
+            moverCenario
+        );
+
 }
+
+
 /* =========================================
-   PARAR MOVIMENTO DO FUNDO
+   PARAR CENÁRIO
 ========================================= */
 
 function pararMovimentoCenario() {
 
-    if (cenarioAnimacao) {
-        cancelAnimationFrame(cenarioAnimacao);
-        cenarioAnimacao = null;
+    if (
+        cenarioAnimacao
+    ) {
+
+        cancelAnimationFrame(
+            cenarioAnimacao
+        );
+
+        cenarioAnimacao =
+            null;
+
     }
+
 }
+
 
 /* =========================================
    PLUS
