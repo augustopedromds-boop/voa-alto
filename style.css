@@ -2093,3 +2093,88 @@ body {
         opacity: 0;
     }
 }
+
+/* =========================================
+   VOA ALTO — ÁRVORES DO CENÁRIO
+========================================= */
+
+.park-trees {
+    position: absolute;
+    left: 0;
+    bottom: 16%;
+    width: 100%;
+    height: 55%;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.tree {
+    position: absolute;
+    bottom: 0;
+    width: 150px;
+    height: 230px;
+}
+
+.tree-trunk {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 28px;
+    height: 125px;
+    transform: translateX(-50%);
+    background:
+        linear-gradient(
+            90deg,
+            #342015 0%,
+            #6b4024 35%,
+            #8a572d 55%,
+            #3b2417 100%
+        );
+    border-radius: 45% 45% 12% 12%;
+}
+
+.tree-crown {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 145px;
+    height: 145px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #6e8b3d 0%,
+            #486b2c 35%,
+            #29491f 70%,
+            #172d17 100%
+        );
+    box-shadow:
+        -35px 25px 0 -8px #355524,
+        30px 20px 0 -5px #3d6028,
+        0 10px 20px rgba(0,0,0,.25);
+}
+
+/* árvore 1 */
+.tree-1 {
+    left: 5%;
+    transform: scale(.72);
+}
+
+/* árvore 2 */
+.tree-2 {
+    left: 27%;
+    transform: scale(1.05);
+}
+
+/* árvore 3 */
+.tree-3 {
+    right: 27%;
+    transform: scale(.82);
+}
+
+/* árvore 4 */
+.tree-4 {
+    right: 5%;
+    transform: scale(1.12);
+}
