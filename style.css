@@ -2288,3 +2288,187 @@ body {
 
     background: rgba(255,255,255,.28);
 }
+
+/* =========================================
+   COMPRAR VOUCHER
+========================================= */
+
+.buy-voucher-button {
+    margin-top: 8px;
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #f4bf31;
+    border-radius: 8px;
+    background: rgba(244, 191, 49, 0.08);
+    color: #f4bf31;
+    font-weight: 800;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.buy-voucher-button:hover {
+    background: #f4bf31;
+    color: #070707;
+}
+
+
+/* MODAL */
+
+.voucher-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, .78);
+    backdrop-filter: blur(8px);
+}
+
+.voucher-modal.active {
+    display: flex;
+}
+
+
+.voucher-box {
+    position: relative;
+
+    width: min(440px, 100%);
+
+    padding: 28px;
+
+    border: 1px solid rgba(244, 191, 49, .35);
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #080808
+        );
+
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, .7),
+        0 0 30px rgba(244, 191, 49, .08);
+
+    text-align: center;
+}
+
+
+.voucher-close {
+    position: absolute;
+
+    top: 12px;
+    right: 15px;
+
+    width: 34px;
+    height: 34px;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.08);
+    color: #fff;
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+
+.voucher-icon {
+    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+
+.voucher-box h2 {
+    margin: 0;
+
+    color: #f4bf31;
+
+    font-size: 22px;
+}
+
+
+.voucher-subtitle {
+    margin: 8px 0 22px;
+
+    color: rgba(255,255,255,.6);
+}
+
+
+.voucher-options {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+
+.voucher-option {
+    padding: 15px 10px;
+
+    border: 1px solid rgba(244,191,49,.25);
+    border-radius: 10px;
+
+    background: #111;
+
+    color: #fff;
+
+    cursor: pointer;
+
+    transition: .2s ease;
+}
+
+
+.voucher-option:hover {
+    border-color: #f4bf31;
+
+    background:
+        rgba(244,191,49,.1);
+
+    transform: translateY(-2px);
+}
+
+
+.voucher-option strong {
+    display: block;
+
+    color: #f4bf31;
+
+    font-size: 18px;
+}
+
+
+.voucher-option span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: rgba(255,255,255,.5);
+
+    font-size: 11px;
+}
+
+
+.voucher-message {
+    margin-top: 18px;
+
+    padding: 10px;
+
+    border-radius: 8px;
+
+    background: rgba(255,255,255,.04);
+
+    color: rgba(255,255,255,.6);
+
+    font-size: 13px;
+}
