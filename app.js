@@ -2014,7 +2014,7 @@ function animarQueda(timestamp) {
 
 
     const duracao =
-        1800;
+    4000;
 
 
     const tempo =
@@ -2039,8 +2039,7 @@ function animarQueda(timestamp) {
     */
 
     const suavizado =
-        progresso *
-        progresso;
+    progresso * progresso * progresso;
 
 
     const posicaoInicial =
