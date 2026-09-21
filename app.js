@@ -991,9 +991,8 @@ deslocamento +=
     delta * velocidadeCenario;
 
         if (deslocamento >= largura) {
-            deslocamento -= largura;
-        }
-
+    deslocamento = deslocamento - largura;
+}
         track.style.transform =
             `translate3d(${-deslocamento}px, 0, 0)`;
 
