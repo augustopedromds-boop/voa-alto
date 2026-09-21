@@ -865,12 +865,12 @@ function iniciarMovimentoCenario() {
    mais rápido o cenário passa.
 ========================================= */
 
-const velocidadeBase = 0.035;
+const velocidadeBase = 0.025;
 
 const velocidadeExtra =
     Math.min(
-        multiplicador * 0.008,
-        0.12
+        multiplicador * 0.012,
+        0.16
     );
 
 const velocidadeCenario =
@@ -905,34 +905,22 @@ const nuvens =
 
 montanhasTraseiras.forEach(
     montanha => {
-
         montanha.style.transform =
             `translate3d(${-deslocamento * 0.35}px, 0, 0)`;
-
     }
 );
-
-
-/* Montanhas próximas — mais rápidas */
 
 montanhasFrontais.forEach(
     montanha => {
-
         montanha.style.transform =
             `translate3d(${-deslocamento * 0.75}px, 0, 0)`;
-
     }
 );
 
-
-/* Nuvens — movimento intermediário */
-
 nuvens.forEach(
     nuvem => {
-
         nuvem.style.transform =
             `translate3d(${-deslocamento * 0.50}px, 0, 0)`;
-
     }
 );
         cenarioAnimacao = requestAnimationFrame(moverCenario);
@@ -1687,7 +1675,7 @@ function animarVoo(timestamp) {
    ========================================= */
 
 const progressoCurva = Math.min(
-    multiplicador / 12,
+    progresso,
     1
 );
 
@@ -1709,18 +1697,18 @@ const curvaAltitude =
 
 const y =
     VOO_INICIO_Y -
-    ((VOO_INICIO_Y - VOO_FIM_Y) * curvaAltitude);
+    (
+        (VOO_INICIO_Y - VOO_FIM_Y) *
+        curvaAltitude
+    );
 
-/*
-   Pequeno movimento natural da águia.
-*/
 const oscilacaoY =
     Math.sin(tempoVoo * 2.4) * 1.2;
 
 const posicaoY =
     y + oscilacaoY;
 
-   ultimaPosicaoX = x;
+ultimaPosicaoX = x;
 ultimaPosicaoY = posicaoY;
    
     /* =====================================
