@@ -89,34 +89,29 @@ const historyElement =
 const skyElement =
     document.querySelector(".sky");
 
-const buyVoucherButton =
-    document.getElementById("buyVoucherButton");
+const buyVoucherButton = document.getElementById("buyVoucherButton");
+const voucherModal = document.getElementById("voucherModal");
+const closeVoucherModal = document.getElementById("closeVoucherModal");
 
-const voucherModal =
-    document.getElementById("voucherModal");
-
-const closeVoucherModal =
-    document.getElementById("closeVoucherModal");
-
-buyVoucherButton.addEventListener(
-    "click",
-    () => {
-
+if (buyVoucherButton && voucherModal) {
+    buyVoucherButton.addEventListener("click", () => {
         voucherModal.classList.add("active");
+    });
+}
 
-    }
-);
-
-
-closeVoucherModal.addEventListener(
-    "click",
-    () => {
-
+if (closeVoucherModal && voucherModal) {
+    closeVoucherModal.addEventListener("click", () => {
         voucherModal.classList.remove("active");
+    });
+}
 
-    }
-);
-
+if (voucherModal) {
+    voucherModal.addEventListener("click", (event) => {
+        if (event.target === voucherModal) {
+            voucherModal.classList.remove("active");
+        }
+    });
+}
 /* =========================================
    TRAJETÓRIA DO VOO
 ========================================= */
