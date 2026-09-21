@@ -143,6 +143,116 @@ let flightDot = null;
 
 let pontosVoo = [];
 
+let windParticlesContainer = null;
+let windParticleTimer = null;
+let windIntensity = 0;
+
+function prepararParticulasVento() {
+    windParticlesContainer =
+        document.getElementById("windParticles");
+
+    if (!windParticlesContainer) {
+        console.error("Container das partículas de vento não encontrado.");
+        return;
+    }
+
+    windParticlesContainer.innerHTML = "";
+}
+
+function criarParticulaVento() {
+    if (!windParticlesContainer || !vooAtivo) {
+        return;
+    }
+
+    const particle = document.createElement("div");
+
+    particle.classList.add("wind-particle");
+
+    const tipo = Math.random();
+
+    if (tipo > 0.82) {
+        particle.classList.add("fast");
+    }
+
+    if (tipo < 0.20) {
+        particle.classList.add("long");
+    }
+
+    const largura =
+        25 + Math.random() * 100;
+
+    const posicaoY =
+        8 + Math.random() * 82;
+
+    const duracao =
+        Math.max(
+            0.35,
+            1.6 - (windIntensity * 0.9)
+        );
+
+    particle.style.width =
+        `${largura}px`;
+
+    particle.style.top =
+        `${posicaoY}%`;
+
+    particle.style.right =
+        `${-largura}px`;
+
+    particle.style.animation =
+        `ventoPassar ${duracao}s linear forwards`;
+
+    windParticlesContainer.appendChild(particle);
+
+    setTimeout(() => {
+        particle.remove();
+    }, (duracao * 1000) + 100);
+}
+
+function iniciarParticulasVento() {
+    prepararParticulasVento();
+
+    if (windParticleTimer) {
+        clearInterval(windParticleTimer);
+    }
+
+    windParticleTimer = setInterval(() => {
+
+        if (!vooAtivo || estadoVoo !== "voando") {
+            return;
+        }
+
+        windIntensity =
+            Math.min(
+                multiplicador / 10,
+                1
+            );
+
+        const quantidade =
+            Math.floor(
+                1 + (windIntensity * 4)
+            );
+
+        for (let i = 0; i < quantidade; i++) {
+            criarParticulaVento();
+        }
+
+    }, 180);
+}
+
+function pararParticulasVento() {
+
+    if (windParticleTimer) {
+        clearInterval(windParticleTimer);
+        windParticleTimer = null;
+    }
+
+    if (windParticlesContainer) {
+        windParticlesContainer.innerHTML = "";
+    }
+
+    windIntensity = 0;
+}
 
 /* =========================================
    SALDO
@@ -1344,7 +1454,7 @@ function iniciarVooAlto() {
     */
 
     iniciarMovimentoCenario();
-
+iniciarParticulasVento();
 
     statusElement.textContent =
         "A águia está a voar!";
