@@ -253,6 +253,28 @@ function pararParticulasVento() {
 
     windIntensity = 0;
 }
+/* =========================================
+   RÉGUA DINÂMICA — TEMPO
+========================================= */
+
+const flightRulerX = document.getElementById("flightRulerX");
+
+function atualizarReguaTempo(tempoVoo) {
+
+    if (!flightRulerX) return;
+
+    const segundos = Math.floor(tempoVoo);
+
+    const spans = flightRulerX.querySelectorAll("span");
+
+    spans.forEach((span, index) => {
+
+        const valor = segundos + (index * 2);
+
+        span.textContent = `${valor}s`;
+
+    });
+}
 
 /* =========================================
    SALDO
@@ -1501,7 +1523,8 @@ function animarVoo(timestamp) {
             inicioVoo
         ) / 1000;
 
-
+atualizarReguaTempo(tempoVoo);
+   
     /*
        Progresso da rodada.
 
