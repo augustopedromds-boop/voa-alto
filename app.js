@@ -770,7 +770,13 @@ function prepararCenarioInfinito() {
         }
     );
 
+const arvores =
+    cenario1.querySelector(".park-trees");
 
+if (arvores) {
+    arvores.style.display = "none";
+}
+   
     /*
        Criar cópia do cenário.
     */
@@ -811,13 +817,7 @@ function prepararCenarioInfinito() {
     );
 
 
-    /*
-       Pequenas diferenças no segundo cenário.
-    */
-
-    diferenciarSegundoCenario(
-        cenario2
-    );
+    
 
 
     cenarioPreparado =
