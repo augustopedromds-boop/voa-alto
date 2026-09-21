@@ -851,13 +851,25 @@ plusButton.addEventListener(
         let valor =
             Number(
                 betAmountElement.value
-            );
+            ) || 100;
 
         valor += 100;
+
+        if (valor > saldo) {
+            valor = saldo;
+        }
+
+        if (valor < 100) {
+            valor = 100;
+        }
 
         betAmountElement.value =
             valor;
 
+        betStatus.textContent =
+            "Valor da aposta: " +
+            valor.toLocaleString("pt-AO") +
+            " Kz";
     }
 );
 
@@ -873,22 +885,23 @@ minusButton.addEventListener(
         let valor =
             Number(
                 betAmountElement.value
-            );
+            ) || 100;
 
         valor -= 100;
 
         if (valor < 100) {
-
             valor = 100;
-
         }
 
         betAmountElement.value =
             valor;
 
+        betStatus.textContent =
+            "Valor da aposta: " +
+            valor.toLocaleString("pt-AO") +
+            " Kz";
     }
 );
-
 
 /* =========================================
    APOSTAR
