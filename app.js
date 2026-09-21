@@ -911,20 +911,36 @@ betButton.addEventListener(
     "click",
     () => {
 
+        /* Já existe uma aposta nesta rodada */
         if (apostaFeita) {
 
-            return;
+            betStatus.textContent =
+                "Já tens uma aposta nesta rodada.";
 
+            return;
         }
 
 
-        if (!vooAtivo) {
+        /* Só pode apostar enquanto a águia está a voar */
+        if (!vooAtivo || estadoVoo === "chao") {
 
             betStatus.textContent =
                 "Aguarda a águia levantar voo.";
 
             return;
+        }
 
+
+        /* Não permite apostar depois do voo */
+        if (
+            estadoVoo === "caindo" ||
+            estadoVoo === "preparando"
+        ) {
+
+            betStatus.textContent =
+                "Não podes apostar neste momento.";
+
+            return;
         }
 
 
@@ -934,29 +950,37 @@ betButton.addEventListener(
             );
 
 
-        if (!valor || valor < 100) {
+        /* Valor inválido */
+        if (
+            !Number.isFinite(valor) ||
+            valor < 100
+        ) {
 
             betStatus.textContent =
                 "A aposta mínima é 100 Kz.";
 
             return;
-
         }
 
 
+        /* Saldo insuficiente */
         if (valor > saldo) {
 
             betStatus.textContent =
                 "Saldo insuficiente.";
 
             return;
-
         }
 
 
-        saldo -= valor;
+        /* =====================================
+           REGISTAR APOSTA
+        ===================================== */
 
         valorAposta =
+            valor;
+
+        saldo -=
             valor;
 
         apostaFeita =
@@ -966,8 +990,13 @@ betButton.addEventListener(
             false;
 
 
+        /* Atualizar saldo */
         atualizarSaldo();
 
+
+        /* =====================================
+           ALTERAR BOTÕES
+        ===================================== */
 
         betButton.textContent =
             "APOSTA FEITA ✓";
@@ -975,15 +1004,32 @@ betButton.addEventListener(
         betButton.style.background =
             "#31c96b";
 
+        betButton.disabled =
+            true;
+
 
         cashoutButton.disabled =
             false;
 
+        cashoutButton.textContent =
+            "RETIRAR";
+
+
+        /* =====================================
+           MENSAGEM
+        ===================================== */
 
         betStatus.textContent =
-            "Aposta ativa em " +
+            "Aposta ativa: " +
             valor.toLocaleString("pt-AO") +
             " Kz";
+
+
+        console.log(
+            "APOSTA:",
+            valor,
+            "Kz"
+        );
 
     }
 );
