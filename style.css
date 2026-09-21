@@ -2178,3 +2178,113 @@ body {
     right: 5%;
     transform: scale(1.12);
 }
+
+/* =========================================
+   VOA ALTO — RÉGUA DO VOO
+========================================= */
+
+.flight-ruler-y {
+    position: absolute;
+
+    left: 8px;
+    top: 18%;
+    bottom: 15%;
+
+    width: 42px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+    color: rgba(255,255,255,.55);
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.8);
+}
+
+.flight-ruler-y span {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    height: 16px;
+}
+
+/* pequenas marcas da régua */
+
+.flight-ruler-y span::after {
+    content: "";
+
+    position: absolute;
+
+    left: 27px;
+
+    width: 10px;
+    height: 1px;
+
+    background: rgba(255,255,255,.28);
+}
+
+
+/* =========================================
+   RÉGUA HORIZONTAL
+========================================= */
+
+.flight-ruler-x {
+    position: absolute;
+
+    left: 55px;
+    right: 18px;
+    bottom: 7px;
+
+    height: 25px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+    color: rgba(255,255,255,.55);
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-shadow:
+        0 1px 3px rgba(0,0,0,.8);
+}
+
+.flight-ruler-x span {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+
+    min-width: 20px;
+}
+
+/* marcas verticais */
+
+.flight-ruler-x span::before {
+    content: "";
+
+    position: absolute;
+
+    bottom: 17px;
+
+    width: 1px;
+    height: 7px;
+
+    background: rgba(255,255,255,.28);
+}
