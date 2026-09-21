@@ -997,42 +997,7 @@ deslocamento +=
         track.style.transform =
             `translate3d(${-deslocamento}px, 0, 0)`;
 
-       /* =========================================
-   PARALLAX — PROFUNDIDADE
-========================================= */
-
-const montanhasTraseiras =
-    track.querySelectorAll(".mountains-back");
-
-const montanhasFrontais =
-    track.querySelectorAll(".mountains-front");
-
-const nuvens =
-    track.querySelectorAll(".cloud");
-
-
-/* Montanhas distantes — mais lentas */
-
-montanhasTraseiras.forEach(
-    montanha => {
-        montanha.style.transform =
-            `translate3d(${-deslocamento * 0.35}px, 0, 0)`;
-    }
-);
-
-montanhasFrontais.forEach(
-    montanha => {
-        montanha.style.transform =
-            `translate3d(${-deslocamento * 0.75}px, 0, 0)`;
-    }
-);
-
-nuvens.forEach(
-    nuvem => {
-        nuvem.style.transform =
-            `translate3d(${-deslocamento * 0.50}px, 0, 0)`;
-    }
-);
+      
         cenarioAnimacao = requestAnimationFrame(moverCenario);
     }
 
