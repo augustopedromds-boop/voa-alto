@@ -886,30 +886,7 @@ if (trees) {
 }
 
 
-    const mountainsBack =
-        cenario.querySelector(
-            ".mountains-back"
-        );
-
-    if (mountainsBack) {
-
-        mountainsBack.style.left =
-            "8%";
-
-    }
-
-
-    const mountainsFront =
-        cenario.querySelector(
-            ".mountains-front"
-        );
-
-    if (mountainsFront) {
-
-        mountainsFront.style.left =
-            "4%";
-
-    }
+    
 
 }
 
