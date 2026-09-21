@@ -921,27 +921,23 @@ betButton.addEventListener(
         }
 
 
-        /* Só pode apostar enquanto a águia está a voar */
-        if (!vooAtivo || estadoVoo === "chao") {
+        if (!vooAtivo) {
 
-            betStatus.textContent =
-                "Aguarda a águia levantar voo.";
+    betStatus.textContent =
+        "Aguarda a próxima rodada.";
 
-            return;
-        }
+    return;
+}
 
 
         /* Não permite apostar depois do voo */
-        if (
-            estadoVoo === "caindo" ||
-            estadoVoo === "preparando"
-        ) {
+        if (estadoVoo === "caindo") {
 
-            betStatus.textContent =
-                "Não podes apostar neste momento.";
+    betStatus.textContent =
+        "A rodada já terminou.";
 
-            return;
-        }
+    return;
+}
 
 
         const valor =
