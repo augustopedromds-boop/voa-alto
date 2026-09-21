@@ -591,304 +591,103 @@ let cenarioPreparado = false;
 
 function prepararCenarioInfinito() {
 
-    if (!skyElement) return;
-
-    if (cenarioPreparado) return;
-
-
-    /*
-       Procurar a área principal do jogo.
-    */
-
-    const flightElement =
-        document.querySelector(".flight");
-
-
-    /*
-       IMPORTANTE:
-       tira a águia do SKY e coloca
-       diretamente no FLIGHT.
-
-       Assim o cenário pode andar
-       sem levar a águia consigo.
-    */
-
-    if (
-        eagleElement &&
-        flightElement
-    ) {
-
-        flightElement.appendChild(
-            eagleElement
-        );
-
-        eagleElement.style.setProperty(
-            "position",
-            "absolute",
-            "important"
-        );
-
-        eagleElement.style.setProperty(
-            "left",
-            "50%",
-            "important"
-        );
-
-        eagleElement.style.setProperty(
-            "z-index",
-            "1000",
-            "important"
-        );
-
+    if (cenarioPreparado) {
+        return;
     }
 
+    const sky = document.querySelector(".sky");
+    const flight = document.querySelector(".flight");
+    const eagle = document.getElementById("eagle");
 
-    /*
-       Pegar somente os elementos
-       que pertencem ao cenário.
-    */
+    if (!sky || !flight) {
+        console.error("Sky ou flight não encontrado.");
+        return;
+    }
 
-    const elementosOriginais =
-    Array.from(
-        skyElement.children
-    ).filter(elemento => {
-        return elemento.id !== "eagle" &&
-               !elemento.classList.contains("sun");
+    // A águia sai do sky e passa a ficar diretamente no flight
+    if (eagle && eagle.parentElement !== flight) {
+        flight.appendChild(eagle);
+    }
+
+    if (eagle) {
+        eagle.style.position = "absolute";
+        eagle.style.zIndex = "1000";
+    }
+
+    // Guardar somente os elementos visuais do cenário
+    const elementos = Array.from(sky.children).filter(elemento => {
+
+        if (elemento === eagle) {
+            return false;
+        }
+
+        if (elemento.classList.contains("voa-cenario-track")) {
+            return false;
+        }
+
+        if (elemento.classList.contains("sun")) {
+            return false;
+        }
+
+        return true;
     });
 
-    /*
-       Criar pista infinita.
-    */
+    // Criar pista contínua
+    const track = document.createElement("div");
 
-    cenarioTrack =
-        document.createElement(
-            "div"
-        );
+    track.className = "voa-cenario-track";
 
+    track.style.position = "absolute";
+    track.style.left = "0";
+    track.style.top = "0";
+    track.style.height = "100%";
+    track.style.width = "300%";
+    track.style.display = "block";
+    track.style.pointerEvents = "none";
+    track.style.zIndex = "1";
+    track.style.willChange = "transform";
 
-    cenarioTrack.className =
-        "voa-cenario-track";
+    // Criar 3 painéis
+    for (let i = 0; i < 3; i++) {
 
+        const painel = document.createElement("div");
 
-    cenarioTrack.style.position =
-        "absolute";
+        painel.className = "voa-cenario-painel";
 
-    cenarioTrack.style.left =
-        "0";
+        painel.style.position = "absolute";
+        painel.style.top = "0";
+        painel.style.left = `${i * 100}%`;
+        painel.style.width = "33.333333%";
+        painel.style.height = "100%";
+        painel.style.overflow = "hidden";
+        painel.style.pointerEvents = "none";
 
-    cenarioTrack.style.top =
-        "0";
+        elementos.forEach(elemento => {
 
-    cenarioTrack.style.width =
-        "200%";
+            const clone = elemento.cloneNode(true);
 
-    cenarioTrack.style.height =
-        "100%";
+            painel.appendChild(clone);
 
-    cenarioTrack.style.display =
-        "flex";
+        });
 
-    cenarioTrack.style.pointerEvents =
-        "none";
+        track.appendChild(painel);
+    }
 
-    cenarioTrack.style.zIndex =
-        "1";
+    // Remover os elementos antigos
+    elementos.forEach(elemento => {
 
-
-    /*
-       CENÁRIO 1
-    */
-
-    const cenario1 =
-        document.createElement(
-            "div"
-        );
-
-
-    cenario1.className =
-        "voa-cenario-painel";
-
-
-    cenario1.style.position =
-        "relative";
-
-    cenario1.style.width =
-        "50%";
-
-    cenario1.style.height =
-        "100%";
-
-    cenario1.style.flex =
-        "0 0 50%";
-
-    cenario1.style.overflow =
-        "hidden";
-
-
-    /*
-       CENÁRIO 2
-    */
-
-    const cenario2 =
-        document.createElement(
-            "div"
-        );
-
-
-    cenario2.className =
-        "voa-cenario-painel";
-
-
-    cenario2.style.position =
-        "relative";
-
-    cenario2.style.width =
-        "50%";
-
-    cenario2.style.height =
-        "100%";
-
-    cenario2.style.flex =
-        "0 0 50%";
-
-    cenario2.style.overflow =
-        "hidden";
-
-
-    /*
-       Colocar os elementos originais
-       no primeiro cenário.
-    */
-
-    elementosOriginais.forEach(
-        elemento => {
-
-            cenario1.appendChild(
-                elemento
-            );
-
+        if (elemento.parentElement === sky) {
+            elemento.remove();
         }
-    );
 
-const arvores =
-    cenario1.querySelector(".park-trees");
+    });
 
-if (arvores) {
-    arvores.style.display = "none";
-}
-   
-    /*
-       Criar cópia do cenário.
-    */
+    sky.appendChild(track);
 
-    elementosOriginais.forEach(
-        elemento => {
-
-            const copia =
-                elemento.cloneNode(true);
-
-            cenario2.appendChild(
-                copia
-            );
-
-        }
-    );
-
-
-    /*
-       Adicionar os dois painéis.
-    */
-
-    cenarioTrack.appendChild(
-        cenario1
-    );
-
-    cenarioTrack.appendChild(
-        cenario2
-    );
-
-
-    /*
-       Colocar a pista dentro do SKY.
-    */
-
-    skyElement.appendChild(
-        cenarioTrack
-    );
-
-
-    
-
-
-    cenarioPreparado =
-        true;
-
+    cenarioTrack = track;
+    cenarioPreparado = true;
 }
 
-
-/* =========================================
-   DIFERENÇA DO SEGUNDO CENÁRIO
-========================================= */
-
-function diferenciarSegundoCenario(
-    cenario
-) {
-
-    const cloud1 =
-        cenario.querySelector(
-            ".cloud-1"
-        );
-
-    if (cloud1) {
-
-        cloud1.style.left =
-            "28%";
-
-    }
-
-
-    const cloud2 =
-        cenario.querySelector(
-            ".cloud-2"
-        );
-
-    if (cloud2) {
-
-        cloud2.style.right =
-            "12%";
-
-    }
-
-
-    const cloud3 =
-        cenario.querySelector(
-            ".cloud-3"
-        );
-
-    if (cloud3) {
-
-        cloud3.style.left =
-            "62%";
-
-    }
-
-
-    const trees =
-    cenario.querySelector(
-        ".park-trees"
-    );
-
-if (trees) {
-
-    trees.style.display =
-        "none";
-
-}
-
-
-    
-
-}
 
 
 /* =========================================
@@ -896,6 +695,7 @@ if (trees) {
 ========================================= */
 
 function iniciarMovimentoCenario() {
+
     prepararCenarioInfinito();
 
     const flight = document.querySelector(".flight");
@@ -906,13 +706,6 @@ function iniciarMovimentoCenario() {
         return;
     }
 
-    const paineis = track.querySelectorAll(".voa-cenario-painel");
-
-    if (paineis.length < 2) {
-        console.error("Painéis do cenário não encontrados.");
-        return;
-    }
-
     const largura = flight.clientWidth;
 
     if (!largura) {
@@ -920,15 +713,21 @@ function iniciarMovimentoCenario() {
         return;
     }
 
-    track.style.width = (largura * 2) + "px";
+    // Cada painel tem exatamente a largura da área de voo
+    const paineis =
+        track.querySelectorAll(".voa-cenario-painel");
 
     paineis.forEach((painel, index) => {
+
         painel.style.position = "absolute";
         painel.style.top = "0";
-        painel.style.width = largura + "px";
+        painel.style.left = `${index * largura}px`;
+        painel.style.width = `${largura}px`;
         painel.style.height = "100%";
-        painel.style.left = (index * largura) + "px";
+
     });
+
+    track.style.width = `${largura * 3}px`;
 
     let deslocamento = 0;
     let ultimoTempo = performance.now();
@@ -938,48 +737,61 @@ function iniciarMovimentoCenario() {
     }
 
     function moverCenario(tempo) {
+
         if (!vooAtivo || estadoVoo !== "voando") {
+
             cenarioAnimacao = null;
             return;
         }
 
-        const delta = tempo - ultimoTempo;
+        const delta =
+            Math.min(
+                tempo - ultimoTempo,
+                40
+            );
+
         ultimoTempo = tempo;
 
-        /* =========================================
-   VELOCIDADE DINÂMICA
-   Quanto maior o multiplicador,
-   mais rápido o cenário passa.
-========================================= */
+        // Velocidade suave
+        const velocidadeBase = 0.025;
 
-const velocidadeBase = 0.025;
+        const velocidadeExtra =
+            Math.min(
+                multiplicador * 0.012,
+                0.16
+            );
 
-const velocidadeExtra =
-    Math.min(
-        multiplicador * 0.012,
-        0.16
-    );
+        const velocidade =
+            velocidadeBase +
+            velocidadeExtra;
 
-const velocidadeCenario =
-    velocidadeBase +
-    velocidadeExtra;
+        deslocamento +=
+            delta * velocidade;
 
-deslocamento +=
-    delta * velocidadeCenario;
-
+        /*
+         * Quando o primeiro painel saiu completamente,
+         * movemos apenas uma largura para trás.
+         *
+         * Como existem 3 painéis iguais,
+         * o jogador continua vendo o mesmo cenário.
+         */
         if (deslocamento >= largura) {
-    deslocamento = deslocamento - largura;
-}
+
+            deslocamento -= largura;
+
+        }
+
         track.style.transform =
             `translate3d(${-deslocamento}px, 0, 0)`;
 
-      
-        cenarioAnimacao = requestAnimationFrame(moverCenario);
+        cenarioAnimacao =
+            requestAnimationFrame(moverCenario);
     }
 
-    cenarioAnimacao = requestAnimationFrame(moverCenario);
+    cenarioAnimacao =
+        requestAnimationFrame(moverCenario);
 }
-
+        
 
 /* =========================================
    PARAR CENÁRIO
