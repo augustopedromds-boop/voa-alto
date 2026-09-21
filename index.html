@@ -568,11 +568,11 @@
      MODAL COMPRAR VOUCHER
 ========================================= -->
 
+```html
 <div
     id="voucherModal"
     class="voucher-modal"
 >
-
     <div class="voucher-box">
 
         <button
@@ -583,75 +583,183 @@
             ×
         </button>
 
-        <div class="voucher-icon">
-            🎟️
+        <!-- ETAPA 1: ESCOLHER VOUCHER -->
+
+        <div id="voucherStep1">
+
+            <div class="voucher-icon">🎟️</div>
+
+            <h2>COMPRAR VOUCHER</h2>
+
+            <p class="voucher-subtitle">
+                Escolhe o valor do teu voucher
+            </p>
+
+            <div class="voucher-options">
+
+                <button
+                    class="voucher-option"
+                    data-value="500"
+                    type="button"
+                >
+                    <strong>500 Kz</strong>
+                    <span>Voucher DEMO</span>
+                </button>
+
+                <button
+                    class="voucher-option"
+                    data-value="1000"
+                    type="button"
+                >
+                    <strong>1.000 Kz</strong>
+                    <span>Voucher DEMO</span>
+                </button>
+
+                <button
+                    class="voucher-option"
+                    data-value="2500"
+                    type="button"
+                >
+                    <strong>2.500 Kz</strong>
+                    <span>Voucher DEMO</span>
+                </button>
+
+                <button
+                    class="voucher-option"
+                    data-value="5000"
+                    type="button"
+                >
+                    <strong>5.000 Kz</strong>
+                    <span>Voucher DEMO</span>
+                </button>
+
+                <button
+                    class="voucher-option"
+                    data-value="10000"
+                    type="button"
+                >
+                    <strong>10.000 Kz</strong>
+                    <span>Voucher DEMO</span>
+                </button>
+
+            </div>
+
         </div>
 
-        <h2>COMPRAR VOUCHER</h2>
 
-        <p class="voucher-subtitle">
-            Escolhe o valor do teu voucher
-        </p>
-
-        <div class="voucher-options">
-
-            <button
-                class="voucher-option"
-                data-value="500"
-                type="button"
-            >
-                <strong>500 Kz</strong>
-                <span>Voucher</span>
-            </button>
-
-            <button
-                class="voucher-option"
-                data-value="1000"
-                type="button"
-            >
-                <strong>1.000 Kz</strong>
-                <span>Voucher</span>
-            </button>
-
-            <button
-                class="voucher-option"
-                data-value="2500"
-                type="button"
-            >
-                <strong>2.500 Kz</strong>
-                <span>Voucher</span>
-            </button>
-
-            <button
-                class="voucher-option"
-                data-value="5000"
-                type="button"
-            >
-                <strong>5.000 Kz</strong>
-                <span>Voucher</span>
-            </button>
-
-            <button
-                class="voucher-option"
-                data-value="10000"
-                type="button"
-            >
-                <strong>10.000 Kz</strong>
-                <span>Voucher</span>
-            </button>
-
-        </div>
+        <!-- ETAPA 2: DADOS PARA TRANSFERÊNCIA DEMO -->
 
         <div
-            id="voucherMessage"
-            class="voucher-message"
+            id="voucherStep2"
+            class="voucher-step"
+            style="display:none;"
         >
-            Escolhe um voucher.
+
+            <div class="voucher-icon">🏦</div>
+
+            <h2>DADOS PARA TRANSFERÊNCIA</h2>
+
+            <div class="demo-warning">
+                ⚠️ MODO DEMO — NÃO É UMA CONTA REAL
+            </div>
+
+            <p class="voucher-subtitle">
+                Faz de conta que estás a realizar a transferência
+                para comprar o voucher.
+            </p>
+
+            <div class="transfer-data">
+
+                <div class="transfer-row">
+                    <span>Beneficiário</span>
+                    <strong>VOA ALTO DEMO</strong>
+                </div>
+
+                <div class="transfer-row">
+                    <span>Banco</span>
+                    <strong>BANCO DEMO</strong>
+                </div>
+
+                <div class="transfer-row">
+                    <span>IBAN</span>
+                    <strong>AO00 0000 0000 0000 0000 0000 0</strong>
+                </div>
+
+                <div class="transfer-row">
+                    <span>Valor</span>
+                    <strong id="selectedVoucherValue">
+                        0 Kz
+                    </strong>
+                </div>
+
+            </div>
+
+            <button
+                id="demoTransferButton"
+                class="demo-transfer-button"
+                type="button"
+            >
+                ✓ JÁ FIZ A TRANSFERÊNCIA
+            </button>
+
+            <button
+                id="backVoucherButton"
+                class="back-voucher-button"
+                type="button"
+            >
+                ← Voltar
+            </button>
+
+        </div>
+
+
+        <!-- ETAPA 3: PEDIDO PENDENTE -->
+
+        <div
+            id="voucherStep3"
+            class="voucher-step"
+            style="display:none;"
+        >
+
+            <div class="voucher-icon">⏳</div>
+
+            <h2>PEDIDO ENVIADO</h2>
+
+            <p class="voucher-subtitle">
+                O teu pedido foi registado.
+            </p>
+
+            <div class="pending-box">
+
+                <div class="pending-icon">
+                    🕐
+                </div>
+
+                <strong>
+                    PAGAMENTO PENDENTE
+                </strong>
+
+                <p>
+                    O voucher será liberado depois da
+                    confirmação no painel DEMO.
+                </p>
+
+            </div>
+
+            <button
+                id="closePendingButton"
+                class="demo-transfer-button"
+                type="button"
+            >
+                FECHAR
+            </button>
+
         </div>
 
     </div>
-
 </div>
+```
+
     
 <script src="app.js"></script>
     
