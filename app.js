@@ -859,8 +859,26 @@ function iniciarMovimentoCenario() {
         const delta = tempo - ultimoTempo;
         ultimoTempo = tempo;
 
-        // velocidade do cenário
-        deslocamento += delta * 0.045;
+        /* =========================================
+   VELOCIDADE DINÂMICA
+   Quanto maior o multiplicador,
+   mais rápido o cenário passa.
+========================================= */
+
+const velocidadeBase = 0.035;
+
+const velocidadeExtra =
+    Math.min(
+        multiplicador * 0.008,
+        0.12
+    );
+
+const velocidadeCenario =
+    velocidadeBase +
+    velocidadeExtra;
+
+deslocamento +=
+    delta * velocidadeCenario;
 
         if (deslocamento >= largura) {
             deslocamento -= largura;
