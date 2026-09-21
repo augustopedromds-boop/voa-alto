@@ -2017,3 +2017,27 @@ body {
         cx 0.04s linear,
         cy 0.04s linear;
 }
+
+/* =========================================
+   PROFUNDIDADE DO CENÁRIO
+========================================= */
+
+.mountains-back {
+    transform-origin: center bottom;
+    will-change: transform;
+}
+
+.mountains-front {
+    transform-origin: center bottom;
+    will-change: transform;
+}
+
+.cloud {
+    will-change: transform;
+}
+
+.voa-cenario-track {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+}
