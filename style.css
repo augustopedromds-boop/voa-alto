@@ -2041,3 +2041,55 @@ body {
     backface-visibility: hidden;
     transform: translate3d(0, 0, 0);
 }
+
+/* =========================================
+   VOA ALTO — VENTO / PARTÍCULAS DE VELOCIDADE
+   ========================================= */
+
+.wind-particles {
+    position: absolute;
+    inset: 0;
+    z-index: 12;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.wind-particle {
+    position: absolute;
+    height: 2px;
+    border-radius: 999px;
+    background: rgba(244, 191, 49, 0.75);
+    box-shadow: 0 0 6px rgba(244, 191, 49, 0.45);
+    transform: translateX(0);
+    opacity: 0;
+}
+
+.wind-particle.fast {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.65);
+}
+
+.wind-particle.long {
+    height: 1px;
+    background: rgba(244, 191, 49, 0.45);
+}
+
+@keyframes ventoPassar {
+    0% {
+        transform: translate3d(120px, 0, 0);
+        opacity: 0;
+    }
+
+    12% {
+        opacity: 0.8;
+    }
+
+    85% {
+        opacity: 0.65;
+    }
+
+    100% {
+        transform: translate3d(-900px, 0, 0);
+        opacity: 0;
+    }
+}
