@@ -1531,6 +1531,64 @@ function animarVoo(timestamp) {
         ) / 1000;
 
 atualizarReguaTempo(tempoVoo);
+
+   function atualizarReguaMultiplicador() {
+
+    if (!flightRulerY) return;
+
+    const spans =
+        flightRulerY.querySelectorAll("span");
+
+    /*
+       Define o maior valor visível
+       conforme o multiplicador atual.
+    */
+
+    let topo;
+
+    if (multiplicador < 2) {
+        topo = 2;
+    } else if (multiplicador < 4) {
+        topo = 4;
+    } else if (multiplicador < 6) {
+        topo = 6;
+    } else if (multiplicador < 10) {
+        topo = 10;
+    } else if (multiplicador < 20) {
+        topo = 20;
+    } else if (multiplicador < 50) {
+        topo = 50;
+    } else if (multiplicador < 100) {
+        topo = 100;
+    } else {
+        topo = Math.ceil(multiplicador / 20) * 20;
+    }
+
+    /*
+       Cria 6 marcas verticais.
+    */
+
+    const passo =
+        (topo - 1) / 5;
+
+    spans.forEach((span, index) => {
+
+        const valor =
+            topo - (passo * index);
+
+        let texto;
+
+        if (valor < 10) {
+            texto = valor.toFixed(1);
+        } else {
+            texto = Math.round(valor);
+        }
+
+        span.textContent =
+            texto + "x";
+
+    });
+}
    
     /*
        Progresso da rodada.
@@ -1559,7 +1617,8 @@ atualizarReguaTempo(tempoVoo);
 
     atualizarMultiplicador();
 
-
+atualizarReguaMultiplicador();
+   
     verificarAutoCashout();
 
 
