@@ -131,8 +131,7 @@ const POSICAO_ALTA = VOO_FIM_Y;
 */
 
 let ultimaPosicaoX = VOO_INICIO_X;
-let ultimaPosicaoY = VOO_INICIO_Y;
-
+let ultimaPosicaoY = posicaoY;
 /*
    Elementos do gráfico.
 */
@@ -1259,9 +1258,7 @@ function iniciarVooAlto() {
     );
 
 
-    eagleElement.style.setProperty(
-        "top",
-        VOO_INICIO_Y + "%",
+    eagleElement.style.top = posicaoY + "%";
         "important"
     );
 
@@ -1486,7 +1483,7 @@ function limparGraficoVoo() {
    ATUALIZAR GRÁFICO
 ========================================= */
 
-function atualizarGraficoVoo(x, y) {
+function atualizarGraficoVoo(x, posicaoY); {
 
     if (!flightPath || !flightGlow || !flightDot) {
         return;
@@ -1627,37 +1624,43 @@ function animarVoo(timestamp) {
     verificarAutoCashout();
 
 
-    /* =========================================
-   TRAJETÓRIA DA ÁGUIA
+   /* =========================================
+   TRAJETÓRIA LIGADA AO MULTIPLICADOR
    ========================================= */
 
-const curva = Math.pow(progresso, 0.82);
+const progressoCurva = Math.min(
+    multiplicador / 12,
+    1
+);
 
-/* avanço horizontal */
-const xBase =
+/*
+   Movimento horizontal.
+   A águia avança continuamente.
+*/
+const x =
     VOO_INICIO_X +
     ((VOO_FIM_X - VOO_INICIO_X) * progresso);
 
-/* movimento suave para a frente */
-const oscilacaoX =
-    Math.sin(tempoVoo * 1.6) * 0.8;
+/*
+   A subida acelera progressivamente.
+   No início sobe pouco.
+   Depois ganha altitude.
+*/
+const curvaAltitude =
+    Math.pow(progressoCurva, 0.72);
 
-const x = xBase + oscilacaoX;
-
-
-/* subida em curva */
-const yBase =
+const y =
     VOO_INICIO_Y -
-    ((VOO_INICIO_Y - VOO_FIM_Y) * curva);
+    ((VOO_INICIO_Y - VOO_FIM_Y) * curvaAltitude);
 
-/* pequeno balanço natural */
+/*
+   Pequeno movimento natural da águia.
+*/
 const oscilacaoY =
     Math.sin(tempoVoo * 2.4) * 1.2;
 
-const y = yBase + oscilacaoY;
-
-ultimaPosicaoX = x;
-ultimaPosicaoY = y;
+const posicaoY =
+    y + oscilacaoY;
    
     /* =====================================
        INCLINAÇÃO
