@@ -2152,7 +2152,7 @@ function finalizarQueda() {
         "chao";
 
 
-    colocarAguiaNoChao();
+   
 
 
     pararBatimentoAsas();
