@@ -93,6 +93,147 @@ const buyVoucherButton = document.getElementById("buyVoucherButton");
 const voucherModal = document.getElementById("voucherModal");
 const closeVoucherModal = document.getElementById("closeVoucherModal");
 
+```js
+/* =========================================
+   VOUCHER DEMO — SELEÇÃO DO VALOR
+========================================= */
+
+const voucherStep1 = document.getElementById("voucherStep1");
+const voucherStep2 = document.getElementById("voucherStep2");
+const voucherStep3 = document.getElementById("voucherStep3");
+
+const voucherOptions = document.querySelectorAll(".voucher-option");
+const selectedVoucherValue = document.getElementById("selectedVoucherValue");
+
+const demoTransferButton =
+    document.getElementById("demoTransferButton");
+
+const backVoucherButton =
+    document.getElementById("backVoucherButton");
+
+const closePendingButton =
+    document.getElementById("closePendingButton");
+
+
+let voucherSelecionado = 0;
+
+
+/* ESCOLHER VOUCHER */
+
+voucherOptions.forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+        const valor = Number(button.dataset.value);
+
+        if (!Number.isFinite(valor) || valor <= 0) {
+            return;
+        }
+
+        voucherSelecionado = valor;
+
+        if (selectedVoucherValue) {
+            selectedVoucherValue.textContent =
+                valor.toLocaleString("pt-AO") + " Kz";
+        }
+
+        if (voucherStep1) {
+            voucherStep1.style.display = "none";
+        }
+
+        if (voucherStep2) {
+            voucherStep2.style.display = "block";
+        }
+
+        if (voucherStep3) {
+            voucherStep3.style.display = "none";
+        }
+
+    });
+
+});
+
+
+/* VOLTAR PARA OS VALORES */
+
+if (backVoucherButton) {
+
+    backVoucherButton.addEventListener("click", () => {
+
+        if (voucherStep1) {
+            voucherStep1.style.display = "block";
+        }
+
+        if (voucherStep2) {
+            voucherStep2.style.display = "none";
+        }
+
+        if (voucherStep3) {
+            voucherStep3.style.display = "none";
+        }
+
+    });
+
+}
+
+
+/* JÁ FIZ A TRANSFERÊNCIA — DEMO */
+
+if (demoTransferButton) {
+
+    demoTransferButton.addEventListener("click", () => {
+
+        if (!voucherSelecionado) {
+            return;
+        }
+
+        if (voucherStep1) {
+            voucherStep1.style.display = "none";
+        }
+
+        if (voucherStep2) {
+            voucherStep2.style.display = "none";
+        }
+
+        if (voucherStep3) {
+            voucherStep3.style.display = "block";
+        }
+
+    });
+
+}
+
+
+/* FECHAR PEDIDO PENDENTE */
+
+if (closePendingButton) {
+
+    closePendingButton.addEventListener("click", () => {
+
+        if (voucherModal) {
+            voucherModal.classList.remove("active");
+        }
+
+        if (voucherStep1) {
+            voucherStep1.style.display = "block";
+        }
+
+        if (voucherStep2) {
+            voucherStep2.style.display = "none";
+        }
+
+        if (voucherStep3) {
+            voucherStep3.style.display = "none";
+        }
+
+        voucherSelecionado = 0;
+
+    });
+
+}
+
+
+
 if (buyVoucherButton && voucherModal) {
     buyVoucherButton.addEventListener("click", () => {
         voucherModal.classList.add("active");
