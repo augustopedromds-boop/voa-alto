@@ -2080,6 +2080,8 @@ function iniciarDescolagem() {
 
 function iniciarQueda() {
 
+   pararParticulasVento();
+   
     if (!vooAtivo) {
 
         return;
