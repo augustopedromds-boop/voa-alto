@@ -131,7 +131,7 @@ const POSICAO_ALTA = VOO_FIM_Y;
 */
 
 let ultimaPosicaoX = VOO_INICIO_X;
-let ultimaPosicaoY = posicaoY;
+let ultimaPosicaoY = VOO_INICIO_Y;
 /*
    Elementos do gráfico.
 */
@@ -1258,9 +1258,11 @@ function iniciarVooAlto() {
     );
 
 
-    eagleElement.style.top = posicaoY + "%";
-        "important"
-    );
+    eagleElement.style.setProperty(
+    "top",
+    VOO_INICIO_Y + "%",
+    "important"
+);
 
 
     eagleElement.style.setProperty(
@@ -1483,7 +1485,7 @@ function limparGraficoVoo() {
    ATUALIZAR GRÁFICO
 ========================================= */
 
-function atualizarGraficoVoo(x, posicaoY); {
+function atualizarGraficoVoo(x, y) {
 
     if (!flightPath || !flightGlow || !flightDot) {
         return;
@@ -1494,16 +1496,10 @@ function atualizarGraficoVoo(x, posicaoY); {
         y: y
     });
 
-    /*
-       Mantém uma trajetória longa.
-    */
     if (pontosVoo.length > 240) {
         pontosVoo.shift();
     }
 
-    /*
-       Converte os pontos para SVG.
-    */
     const pontos = pontosVoo
         .map(p => `${p.x},${p.y}`)
         .join(" ");
@@ -1518,10 +1514,6 @@ function atualizarGraficoVoo(x, posicaoY); {
         pontos
     );
 
-    /*
-       O ponto dourado acompanha
-       exatamente a posição da águia.
-    */
     flightDot.setAttribute(
         "cx",
         x
@@ -1661,6 +1653,9 @@ const oscilacaoY =
 
 const posicaoY =
     y + oscilacaoY;
+
+   ultimaPosicaoX = x;
+ultimaPosicaoY = posicaoY;
    
     /* =====================================
        INCLINAÇÃO
@@ -1705,10 +1700,10 @@ const posicaoY =
 
 
     eagleElement.style.setProperty(
-        "top",
-        y + "%",
-        "important"
-    );
+    "top",
+    posicaoY + "%",
+    "important"
+);
 
 
     eagleElement.style.setProperty(
@@ -1725,9 +1720,9 @@ const posicaoY =
     ====================================== */
 
     atualizarGraficoVoo(
-        x,
-        y
-    );
+    x,
+    posicaoY
+);
 
 
     /* =====================================
