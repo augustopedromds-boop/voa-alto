@@ -254,10 +254,14 @@ function pararParticulasVento() {
     windIntensity = 0;
 }
 /* =========================================
-   RÉGUA DINÂMICA — TEMPO
+   RÉGUA DINÂMICA
 ========================================= */
 
-const flightRulerX = document.getElementById("flightRulerX");
+const flightRulerX =
+    document.getElementById("flightRulerX");
+
+const flightRulerY =
+    document.getElementById("flightRulerY");
 
 function atualizarReguaTempo(tempoVoo) {
 
@@ -265,13 +269,16 @@ function atualizarReguaTempo(tempoVoo) {
 
     const segundos = Math.floor(tempoVoo);
 
-    const spans = flightRulerX.querySelectorAll("span");
+    const spans =
+        flightRulerX.querySelectorAll("span");
 
     spans.forEach((span, index) => {
 
-        const valor = segundos + (index * 2);
+        const valor =
+            segundos + (index * 2);
 
-        span.textContent = `${valor}s`;
+        span.textContent =
+            `${valor}s`;
 
     });
 }
